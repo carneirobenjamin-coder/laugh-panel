@@ -7,58 +7,49 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    :root{
-      --bg:#0a0a0a;--surface:#111111;--surface2:#1a1a1a;--surface3:#222222;
-      --border:rgba(255,255,255,0.07);--border-strong:rgba(255,255,255,0.14);
-      --text:#f0f0ee;--text2:#888884;--text3:#444440;
-      --accent:#e8ff47;--green:#4ade80;--green-bg:rgba(74,222,128,0.1);
-      --amber:#fbbf24;--amber-bg:rgba(251,191,36,0.1);
-      --red:#f87171;--red-bg:rgba(248,113,113,0.1);
-      --blue:#60a5fa;--blue-bg:rgba(96,165,250,0.1);
-      --radius:14px;--radius-sm:8px;
-    }
+    :root{--bg:#0a0a0a;--surface:#111111;--surface2:#1a1a1a;--surface3:#222222;--border:rgba(255,255,255,0.07);--border-strong:rgba(255,255,255,0.14);--text:#f0f0ee;--text2:#888884;--text3:#444440;--accent:#e8ff47;--green:#4ade80;--green-bg:rgba(74,222,128,0.1);--amber:#fbbf24;--amber-bg:rgba(251,191,36,0.1);--red:#f87171;--red-bg:rgba(248,113,113,0.1);--blue:#60a5fa;--blue-bg:rgba(96,165,250,0.1);--radius:14px;--radius-sm:8px;}
     body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6;overflow-x:hidden;}
     .layout{display:flex;min-height:100vh;}
-    .sidebar{width:240px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;}
-    .sidebar-brand{padding:28px 22px 22px;border-bottom:1px solid var(--border);}
+    .sidebar{width:240px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;overflow-y:auto;}
+    .sidebar-brand{padding:24px 20px 20px;border-bottom:1px solid var(--border);}
     .brand-logo{display:flex;align-items:center;gap:10px;margin-bottom:4px;}
-    .brand-mark{width:38px;height:38px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;}
-    .brand-mark svg{width:20px;height:20px;fill:black;}
-    .brand-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;letter-spacing:-0.02em;}
+    .brand-mark{width:36px;height:36px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;}
+    .brand-mark svg{width:18px;height:18px;fill:black;}
+    .brand-name{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;letter-spacing:-0.02em;}
     .brand-sub{font-size:11px;color:var(--text2);font-family:'DM Mono',monospace;}
-    .sidebar-nav{padding:14px 10px;flex:1;overflow-y:auto;}
+    .sidebar-nav{padding:12px 10px;flex:1;}
     .nav-label{font-size:10px;font-weight:500;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;padding:10px 12px 4px;}
-    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius-sm);cursor:pointer;color:var(--text2);font-size:13px;transition:all 0.15s;border:none;background:none;width:100%;text-align:left;font-family:'DM Sans',sans-serif;}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--radius-sm);cursor:pointer;color:var(--text2);font-size:13px;transition:all 0.15s;border:none;background:none;width:100%;text-align:left;font-family:'DM Sans',sans-serif;}
     .nav-item:hover{background:var(--surface2);color:var(--text);}
     .nav-item.active{background:var(--accent);color:black;font-weight:500;}
-    .nav-icon{width:16px;height:16px;flex-shrink:0;opacity:0.7;}
+    .nav-icon{width:15px;height:15px;flex-shrink:0;opacity:0.7;}
     .nav-item.active .nav-icon{opacity:1;}
-    .sidebar-footer{padding:18px 22px;border-top:1px solid var(--border);}
-    .user-avatar{width:32px;height:32px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:black;font-family:'Syne',sans-serif;}
+    .sidebar-footer{padding:16px 20px;border-top:1px solid var(--border);}
     .user-chip{display:flex;align-items:center;gap:10px;}
+    .user-avatar{width:30px;height:30px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:black;}
     .user-name{font-size:13px;font-weight:500;}
     .user-role{font-size:11px;color:var(--text2);}
-    .live-dot{display:inline-block;width:6px;height:6px;background:#4ade80;border-radius:50%;margin-right:6px;animation:pulse 2s infinite;}
+    .live-dot{display:inline-block;width:6px;height:6px;background:#4ade80;border-radius:50%;margin-right:5px;animation:pulse 2s infinite;}
     @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
-    .main{margin-left:240px;flex:1;padding:36px 40px;max-width:calc(100% - 240px);}
-    .page{display:none;animation:fadeUp 0.25s ease both;}
+    .main{margin-left:240px;flex:1;padding:32px 36px;max-width:calc(100% - 240px);}
+    .page{display:none;animation:fadeUp 0.22s ease both;}
     .page.active{display:block;}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
-    .page-header{margin-bottom:32px;}
-    .page-eyebrow{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;font-family:'DM Mono',monospace;margin-bottom:6px;}
-    .page-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;letter-spacing:-0.02em;}
-    .page-sub{font-size:13px;color:var(--text2);margin-top:4px;}
-    .metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;}
-    .metric-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;}
-    .metric-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;}
-    .metric-value{font-family:'Syne',sans-serif;font-size:30px;font-weight:700;letter-spacing:-0.03em;}
-    .metric-note{font-size:11px;color:var(--text3);margin-top:4px;font-family:'DM Mono',monospace;}
-    .metric-card.accent{background:var(--accent);border-color:var(--accent);}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+    .page-header{margin-bottom:28px;}
+    .page-eyebrow{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;font-family:'DM Mono',monospace;margin-bottom:5px;}
+    .page-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:700;letter-spacing:-0.02em;}
+    .page-sub{font-size:13px;color:var(--text2);margin-top:3px;}
+    .metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
+    .metric-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;}
+    .metric-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;}
+    .metric-value{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;letter-spacing:-0.03em;}
+    .metric-note{font-size:11px;color:var(--text3);margin-top:3px;font-family:'DM Mono',monospace;}
+    .metric-card.accent{background:var(--accent);}
     .metric-card.accent .metric-label,.metric-card.accent .metric-value,.metric-card.accent .metric-note{color:black;}
-    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;}
-    .card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;}
+    .card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
     .card-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;}
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
     .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
     .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
     .pill{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;font-family:'DM Mono',monospace;}
@@ -66,87 +57,98 @@
     .pill-amber{background:var(--amber-bg);color:var(--amber);}
     .pill-gray{background:var(--surface2);color:var(--text2);}
     .pill-blue{background:var(--blue-bg);color:var(--blue);}
+    .pill-red{background:var(--red-bg);color:var(--red);}
     table{width:100%;border-collapse:collapse;font-size:13px;}
-    th{text-align:left;font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;padding:0 14px 12px;font-family:'DM Mono',monospace;}
-    td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:middle;}
+    th{text-align:left;font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;padding:0 12px 10px;font-family:'DM Mono',monospace;}
+    td{padding:11px 12px;border-top:1px solid var(--border);vertical-align:middle;}
     tr:hover td{background:var(--surface2);}
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all 0.15s;}
+    .btn{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all 0.15s;text-decoration:none;}
     .btn-accent{background:var(--accent);color:black;}
     .btn-accent:hover{background:#d4eb3a;}
     .btn-ghost{background:var(--surface2);color:var(--text);border:1px solid var(--border-strong);}
     .btn-ghost:hover{background:var(--surface3);}
-    .btn-row{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;}
-    .form-group{margin-bottom:14px;}
-    .form-label{display:block;font-size:11px;font-weight:500;color:var(--text2);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;}
-    input[type=text],input[type=date],input[type=number],select,textarea{width:100%;padding:9px 12px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:var(--surface2);outline:none;transition:border-color 0.15s;}
+    .btn-row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
+    .form-group{margin-bottom:12px;}
+    .form-label{display:block;font-size:11px;font-weight:500;color:var(--text2);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.05em;}
+    input[type=text],input[type=date],input[type=number],select,textarea{width:100%;padding:8px 11px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:var(--surface2);outline:none;transition:border-color 0.15s;}
     input:focus,select:focus,textarea:focus{border-color:var(--accent);}
-    textarea{resize:vertical;min-height:90px;line-height:1.5;}
+    textarea{resize:vertical;min-height:80px;line-height:1.5;}
     select option{background:var(--surface2);}
-    .progress-bar{height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;margin-top:8px;}
-    .progress-fill{height:100%;border-radius:3px;background:var(--accent);transition:width 0.6s ease;}
+    .progress-bar{height:5px;background:var(--surface3);border-radius:3px;overflow:hidden;margin-top:7px;}
+    .progress-fill{height:100%;border-radius:3px;background:var(--accent);}
     .progress-fill.green{background:var(--green);}
     .progress-fill.amber{background:var(--amber);}
     .progress-fill.blue{background:var(--blue);}
-    .match-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;transition:border-color 0.15s;}
-    .match-card:hover{border-color:var(--border-strong);}
-    .match-teams{font-size:13px;font-weight:500;}
-    .match-meta{font-size:11px;color:var(--text2);margin-top:2px;font-family:'DM Mono',monospace;}
-    .match-score{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--accent);}
-    .historic-item{border-left:2px solid var(--amber);padding:12px 16px;margin-bottom:10px;background:rgba(251,191,36,0.04);border-radius:0 var(--radius-sm) var(--radius-sm) 0;cursor:pointer;transition:background 0.15s;}
-    .historic-item:hover{background:rgba(251,191,36,0.08);}
-    .historic-year{font-family:'DM Mono',monospace;font-size:11px;color:var(--amber);margin-bottom:3px;}
+    .cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+    .cal-month{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;}
+    .cal-btn{background:none;border:1px solid var(--border-strong);border-radius:var(--radius-sm);width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text);font-size:15px;}
+    .cal-btn:hover{background:var(--surface2);}
+    .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+    .cal-head{font-size:10px;color:var(--text3);text-align:center;padding:5px 0;font-family:'DM Mono',monospace;text-transform:uppercase;}
+    .cal-cell{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;border-radius:6px;cursor:pointer;position:relative;color:var(--text2);transition:background 0.1s;}
+    .cal-cell:hover:not(.empty){background:var(--surface2);}
+    .cal-cell.today{background:var(--accent);color:black;font-weight:700;}
+    .cal-cell.has-event{border:1px solid var(--border-strong);}
+    .cal-cell.has-partido{background:rgba(96,165,250,0.08);}
+    .cal-dots{display:flex;gap:2px;margin-top:2px;}
+    .cal-dot{width:4px;height:4px;border-radius:50%;}
+    .cal-dot.ev{background:var(--accent);}
+    .cal-dot.partido{background:var(--blue);}
+    .cal-dot.hist{background:var(--amber);}
+    .cal-cell.today .cal-dot{background:black;}
+    .cal-cell.empty{cursor:default;pointer-events:none;}
+    .historic-item{border-left:2px solid var(--amber);padding:10px 14px;margin-bottom:8px;background:rgba(251,191,36,0.04);border-radius:0 var(--radius-sm) var(--radius-sm) 0;cursor:pointer;transition:background 0.15s;display:block;text-decoration:none;}
+    .historic-item:hover{background:rgba(251,191,36,0.09);}
+    .historic-year{font-family:'DM Mono',monospace;font-size:11px;color:var(--amber);margin-bottom:2px;}
     .historic-title{font-size:13px;font-weight:500;color:var(--text);}
-    .historic-club{font-size:11px;color:var(--text2);margin-top:2px;}
-    .kpi-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;}
-    .kpi-platform{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;font-family:'DM Mono',monospace;margin-bottom:6px;}
-    .kpi-value{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:2px;}
-    .kpi-change{font-size:11px;font-family:'DM Mono',monospace;}
-    .kpi-change.up{color:var(--green);}
-    .task-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);}
+    .historic-club{font-size:11px;color:var(--text2);margin-top:1px;}
+    .partido-item{border-left:2px solid var(--blue);padding:10px 14px;margin-bottom:8px;background:rgba(96,165,250,0.04);border-radius:0 var(--radius-sm) var(--radius-sm) 0;}
+    .partido-fecha{font-family:'DM Mono',monospace;font-size:11px;color:var(--blue);margin-bottom:2px;}
+    .partido-titulo{font-size:13px;font-weight:500;color:var(--text);}
+    .partido-meta{font-size:11px;color:var(--text2);margin-top:1px;}
+    .task-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
     .task-row:last-child{border-bottom:none;}
-    .task-check{width:18px;height:18px;border-radius:4px;border:1px solid var(--border-strong);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;}
+    .task-check{width:17px;height:17px;border-radius:4px;border:1px solid var(--border-strong);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;}
     .task-check.done{background:var(--accent);border-color:var(--accent);}
     .task-check.done svg{display:block;}
     .task-check svg{display:none;width:10px;height:10px;}
     .task-name{flex:1;font-size:13px;}
     .task-name.done{text-decoration:line-through;color:var(--text3);}
     .task-due{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;}
-    .ia-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
-    .ia-chip{padding:6px 14px;border-radius:20px;font-size:12px;border:1px solid var(--border-strong);cursor:pointer;background:var(--surface2);color:var(--text2);transition:all 0.15s;font-family:'DM Sans',sans-serif;}
+    .ia-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px;}
+    .ia-chip{padding:6px 13px;border-radius:20px;font-size:12px;border:1px solid var(--border-strong);cursor:pointer;background:var(--surface2);color:var(--text2);transition:all 0.15s;font-family:'DM Sans',sans-serif;}
     .ia-chip:hover{background:var(--accent);color:black;border-color:var(--accent);}
-    .ia-output{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px;font-size:13px;line-height:1.75;white-space:pre-wrap;min-height:120px;color:var(--text);margin-top:16px;}
-    .spinner{display:inline-block;width:14px;height:14px;border:2px solid var(--border-strong);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:8px;}
+    .ia-output{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;font-size:13px;line-height:1.75;white-space:pre-wrap;min-height:100px;color:var(--text);margin-top:14px;}
+    .spinner{display:inline-block;width:13px;height:13px;border:2px solid var(--border-strong);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:7px;}
     @keyframes spin{to{transform:rotate(360deg);}}
-    .toast{position:fixed;bottom:24px;right:24px;background:var(--accent);color:black;padding:12px 20px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;opacity:0;transform:translateY(8px);transition:all 0.3s;z-index:999;pointer-events:none;font-family:'Syne',sans-serif;}
+    .toast{position:fixed;bottom:22px;right:22px;background:var(--accent);color:black;padding:11px 18px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;opacity:0;transform:translateY(8px);transition:all 0.3s;z-index:999;pointer-events:none;font-family:'Syne',sans-serif;}
     .toast.show{opacity:1;transform:translateY(0);}
-    .divider{height:1px;background:var(--border);margin:20px 0;}
-    .tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.05em;}
-    .efem-link-card{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.2);border-radius:var(--radius-sm);margin-bottom:16px;cursor:pointer;transition:all 0.15s;text-decoration:none;}
-    .efem-link-card:hover{background:rgba(251,191,36,0.12);border-color:rgba(251,191,36,0.4);}
-    .efem-link-title{font-size:13px;font-weight:500;color:var(--amber);}
-    .efem-link-sub{font-size:11px;color:var(--text3);margin-top:2px;}
-    ::-webkit-scrollbar{width:6px;}
+    .divider{height:1px;background:var(--border);margin:18px 0;}
+    .tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;font-family:'DM Mono',monospace;text-transform:uppercase;}
+    .efem-link-card{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.2);border-radius:var(--radius-sm);margin-bottom:14px;text-decoration:none;transition:all 0.15s;}
+    .efem-link-card:hover{background:rgba(251,191,36,0.12);}
+    .plantilla-tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:0;}
+    .plantilla-tab{font-size:13px;padding:8px 16px;cursor:pointer;color:var(--text2);border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.15s;font-family:'DM Sans',sans-serif;}
+    .plantilla-tab:hover{color:var(--text);}
+    .plantilla-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+    .plantilla-content{display:none;}
+    .plantilla-content.active{display:block;}
+    .campana-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:border-color 0.15s;}
+    .campana-card:hover{border-color:var(--border-strong);}
+    .campana-nombre{font-size:13px;font-weight:500;}
+    .campana-meta{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:2px;}
+    .kpi-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;}
+    .kpi-platform{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;font-family:'DM Mono',monospace;margin-bottom:5px;}
+    .kpi-value{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:1px;}
+    .kpi-change{font-size:11px;font-family:'DM Mono',monospace;}
+    .kpi-change.up{color:var(--green);}
+    ::-webkit-scrollbar{width:5px;}
     ::-webkit-scrollbar-track{background:transparent;}
     ::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:3px;}
-    .cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
-    .cal-month{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;}
-    .cal-btn{background:none;border:1px solid var(--border-strong);border-radius:var(--radius-sm);width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text);font-size:16px;}
-    .cal-btn:hover{background:var(--surface2);}
-    .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
-    .cal-head{font-size:10px;color:var(--text3);text-align:center;padding:6px 0;font-family:'DM Mono',monospace;text-transform:uppercase;}
-    .cal-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:12px;border-radius:8px;cursor:pointer;position:relative;color:var(--text2);}
-    .cal-cell:hover:not(.empty){background:var(--surface2);}
-    .cal-cell.today{background:var(--accent);color:black;font-weight:700;}
-    .cal-cell.has-event::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--accent);}
-    .cal-cell.today::after{background:black;}
-    .cal-cell.historic{color:var(--amber);}
-    .cal-cell.historic::after{background:var(--amber)!important;}
-    .cal-cell.empty{cursor:default;pointer-events:none;}
   </style>
 </head>
 <body>
 <div class="layout">
-
 <aside class="sidebar">
   <div class="sidebar-brand">
     <div class="brand-logo">
@@ -157,95 +159,52 @@
   </div>
   <nav class="sidebar-nav">
     <div class="nav-label">Principal</div>
-    <button class="nav-item active" onclick="showPage('inicio',this)">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Inicio
-    </button>
-    <button class="nav-item" onclick="showPage('fixtures',this)">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14V8l6 4-6 4z"/></svg>Fixtures
-    </button>
-    <button class="nav-item" onclick="showPage('historicos',this)">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>Hitos históricos
-    </button>
-    <button class="nav-item" onclick="showPage('calendario',this)">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5C3.89 3 3 3.9 3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>Calendario
-    </button>
+    <button class="nav-item active" onclick="showPage('inicio',this)"><svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Inicio</button>
+    <button class="nav-item" onclick="showPage('fixtures',this)"><svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14V8l6 4-6 4z"/></svg>Fixtures</button>
+    <button class="nav-item" onclick="showPage('historicos',this)"><svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>Hitos históricos</button>
+    <button class="nav-item" onclick="showPage('calendario',this)"><svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5C3.89 3 3 3.9 3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>Calendario</button>
     <div class="nav-label">Agencia</div>
-    <button class="nav-item" onclick="showPage('contenido',this)">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg>Contenido
-    </button>
-    <button class="nav-item" onclick="showPage('progreso',this)">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>Progreso & KPIs
-    </button>
-    <button class="nav-item" onclick="showPage('operaciones',this)">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>Operaciones
-    </button>
+    <button class="nav-item" onclick="showPage('campanias',this)"><svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-1 14H5c-.55 0-1-.45-1-1V7c0-.55.45-1 1-1h14c.55 0 1 .45 1 1v10c0 .55-.45 1-1 1z"/></svg>Propuestas de campaña</button>
+    <button class="nav-item" onclick="showPage('contenido',this)"><svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg>Contenido</button>
+    <button class="nav-item" onclick="showPage('progreso',this)"><svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>Progreso y KPIs</button>
+    <button class="nav-item" onclick="showPage('operaciones',this)"><svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>Operaciones</button>
     <div class="nav-label">IA</div>
-    <button class="nav-item" onclick="showPage('asistente',this)">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>Asistente IA
-    </button>
+    <button class="nav-item" onclick="showPage('asistente',this)"><svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>Asistente IA</button>
   </nav>
   <div class="sidebar-footer">
     <div class="user-chip">
       <div class="user-avatar">B</div>
-      <div><div class="user-name">Benja</div><div class="user-role">LAUGH · Marketing deportivo</div></div>
+      <div><div class="user-name">Benja</div><div class="user-role">LAUGH · Fútbol arg.</div></div>
     </div>
   </div>
 </aside>
-
 <main class="main">
 
 <!-- INICIO -->
 <div id="inicio" class="page active">
-  <div class="page-header">
-    <div class="page-eyebrow">Panel principal</div>
-    <div class="page-title">Buen día, Benja 👋</div>
-    <div class="page-sub" id="fecha-hoy"></div>
-  </div>
+  <div class="page-header"><div class="page-eyebrow">Panel principal</div><div class="page-title">Buen día, Benja 👋</div><div class="page-sub" id="fecha-hoy"></div></div>
   <div class="metrics-row">
-    <div class="metric-card accent">
-      <div class="metric-label">Efeméride de hoy</div>
-      <div class="metric-value" style="font-size:18px;line-height:1.3" id="m-efem-titulo">—</div>
-      <div class="metric-note" id="m-efem-año"></div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-label">Contenidos esta semana</div>
-      <div class="metric-value">8</div>
-      <div class="metric-note">3 pendientes</div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-label">Tareas completadas</div>
-      <div class="metric-value" id="m-tareas">—</div>
-      <div class="metric-note">esta semana</div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-label">Facturas pendientes</div>
-      <div class="metric-value">$180k</div>
-      <div class="metric-note">2 sin cobrar</div>
-    </div>
+    <div class="metric-card accent"><div class="metric-label">Efeméride de hoy</div><div class="metric-value" style="font-size:16px;line-height:1.3" id="m-efem-titulo">—</div><div class="metric-note" id="m-efem-año"></div></div>
+    <div class="metric-card"><div class="metric-label">Contenidos esta semana</div><div class="metric-value">8</div><div class="metric-note">3 pendientes</div></div>
+    <div class="metric-card"><div class="metric-label">Tareas</div><div class="metric-value" id="m-tareas">—</div><div class="metric-note">esta semana</div></div>
+    <div class="metric-card"><div class="metric-label">Campañas guardadas</div><div class="metric-value" id="m-campanias">0</div><div class="metric-note">propuestas</div></div>
   </div>
   <div class="grid2">
     <div class="card">
-      <div class="card-header">
-        <div class="card-title">Fixtures en vivo</div>
-        <span class="pill pill-green"><span class="live-dot" style="margin-right:4px"></span>Promiedos</span>
+      <div class="card-header"><div class="card-title">Fixtures en vivo</div><span class="pill pill-green"><span class="live-dot" style="margin-right:3px"></span>Promiedos</span></div>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:14px">Resultados en tiempo real de la Liga Profesional</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <a href="https://www.promiedos.com.ar" target="_blank" class="btn btn-accent" style="text-decoration:none">Partidos hoy ↗</a>
+        <a href="https://www.promiedos.com.ar/league/liga-profesional/hc" target="_blank" class="btn btn-ghost" style="text-decoration:none">Tabla ↗</a>
       </div>
-      <p style="font-size:13px;color:var(--text2);margin-bottom:16px">Resultados en tiempo real de la Liga Profesional Argentina</p>
-      <a href="https://www.promiedos.com.ar" target="_blank" class="btn btn-accent" style="text-decoration:none;margin-bottom:8px">Ver partidos en vivo ↗</a>
-      <a href="https://www.promiedos.com.ar/league/liga-profesional/hc" target="_blank" class="btn btn-ghost" style="text-decoration:none">Tabla de posiciones ↗</a>
     </div>
     <div class="card">
-      <div class="card-header"><div class="card-title">Acciones rápidas con IA</div></div>
-      <div class="match-card" style="cursor:pointer" onclick="goIA('Armame un calendario editorial de fútbol para los próximos 30 días con la Liga Profesional Argentina.')">
-        <div><div class="match-teams">Calendario editorial</div><div class="match-meta">Generá el plan del mes</div></div>
-        <div style="color:var(--accent);font-size:18px">↗</div>
-      </div>
-      <div class="match-card" style="cursor:pointer" onclick="goIA('Armame una propuesta de preproducción completa para la cobertura de un partido de la Liga Profesional Argentina.')">
-        <div><div class="match-teams">Brief de cobertura</div><div class="match-meta">Para el próximo partido</div></div>
-        <div style="color:var(--accent);font-size:18px">↗</div>
-      </div>
-      <div class="match-card" style="cursor:pointer" onclick="goIA('Dame las efemérides futboleras más importantes de esta semana en el fútbol argentino para generar contenido.')">
-        <div><div class="match-teams">Efemérides para contenido</div><div class="match-meta">Ideas basadas en historia</div></div>
-        <div style="color:var(--accent);font-size:18px">↗</div>
+      <div class="card-header"><div class="card-title">Acciones rápidas</div></div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div class="campana-card" onclick="goIA('Armame un calendario editorial de fútbol para los próximos 30 días con la Liga Profesional Argentina.')"><div><div class="campana-nombre">Calendario editorial</div><div class="campana-meta">Plan del mes completo</div></div><div style="color:var(--accent)">↗</div></div>
+        <div class="campana-card" onclick="showPage('campanias',document.querySelectorAll('.nav-item')[4])"><div><div class="campana-nombre">Nueva propuesta de campaña</div><div class="campana-meta">Brief · Guión · Presupuesto</div></div><div style="color:var(--accent)">↗</div></div>
+        <div class="campana-card" onclick="goIA('Dame las efemérides futboleras más importantes de esta semana para generar contenido.')"><div><div class="campana-nombre">Efemérides para contenido</div><div class="campana-meta">Ideas basadas en historia</div></div><div style="color:var(--accent)">↗</div></div>
+        <div class="campana-card" onclick="showPage('fixtures',document.querySelectorAll('.nav-item')[1])"><div><div class="campana-nombre" style="color:var(--blue)">🌍 Mundial 2026</div><div class="campana-meta">Argentina: 16/6 Argelia · 22/6 Austria · 28/6 Jordania</div></div><div style="color:var(--blue)">↗</div></div>
       </div>
     </div>
   </div>
@@ -253,164 +212,203 @@
 
 <!-- FIXTURES -->
 <div id="fixtures" class="page">
-  <div class="page-header">
-    <div class="page-eyebrow">Liga Profesional AFA</div>
-    <div class="page-title">Fixtures en vivo</div>
-    <div class="page-sub">Datos en tiempo real desde Promiedos</div>
-  </div>
-  <div style="background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.2);border-radius:var(--radius);padding:24px;margin-bottom:20px;text-align:center;">
-    <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:8px;color:var(--amber)">Promiedos — Datos en tiempo real</div>
-    <p style="font-size:13px;color:var(--text2);margin-bottom:20px">Los resultados, fixture y tabla de posiciones se actualizan minuto a minuto directamente en Promiedos.</p>
-    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+  <div class="page-header"><div class="page-eyebrow">Liga Profesional AFA</div><div class="page-title">Fixtures en vivo</div><div class="page-sub">Datos en tiempo real desde Promiedos</div></div>
+  <div style="background:rgba(96,165,250,0.06);border:1px solid rgba(96,165,250,0.2);border-radius:var(--radius);padding:22px;margin-bottom:18px;text-align:center;">
+    <div style="font-family:'Syne',sans-serif;font-size:17px;font-weight:700;margin-bottom:6px;color:var(--blue)">Promiedos — Resultados en tiempo real</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:18px">Fixture, resultados y tabla actualizados minuto a minuto.</p>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
       <a href="https://www.promiedos.com.ar" target="_blank" class="btn btn-accent" style="text-decoration:none">Partidos de hoy ↗</a>
-      <a href="https://www.promiedos.com.ar/league/liga-profesional/hc" target="_blank" class="btn btn-ghost" style="text-decoration:none">Posiciones Liga Prof. ↗</a>
+      <a href="https://www.promiedos.com.ar/league/liga-profesional/hc" target="_blank" class="btn btn-ghost" style="text-decoration:none">Posiciones ↗</a>
       <a href="https://www.promiedos.com.ar/league/copa-argentina/gea" target="_blank" class="btn btn-ghost" style="text-decoration:none">Copa Argentina ↗</a>
-      <a href="https://www.promiedos.com.ar/man" target="_blank" class="btn btn-ghost" style="text-decoration:none">Partidos de mañana ↗</a>
-      <a href="https://www.promiedos.com.ar/ayer" target="_blank" class="btn btn-ghost" style="text-decoration:none">Resultados de ayer ↗</a>
+      <a href="https://www.promiedos.com.ar/man" target="_blank" class="btn btn-ghost" style="text-decoration:none">Mañana ↗</a>
+      <a href="https://www.promiedos.com.ar/ayer" target="_blank" class="btn btn-ghost" style="text-decoration:none">Ayer ↗</a>
     </div>
   </div>
-  <div class="card">
-    <div class="card-header"><div class="card-title">¿Para qué usar esto en tu trabajo?</div></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-      <div style="padding:14px;background:var(--surface2);border-radius:var(--radius-sm);">
-        <div style="font-size:12px;font-weight:500;margin-bottom:6px;color:var(--accent)">Antes de crear contenido</div>
-        <div style="font-size:12px;color:var(--text2)">Chequeá los fixtures para saber qué partidos generar contenido previo y cuáles cubrir en vivo.</div>
-      </div>
-      <div style="padding:14px;background:var(--surface2);border-radius:var(--radius-sm);">
-        <div style="font-size:12px;font-weight:500;margin-bottom:6px;color:var(--accent)">Para informes a clientes</div>
-        <div style="font-size:12px;color:var(--text2)">Usá la tabla de posiciones y resultados para contextualizarlos en tus reportes mensuales.</div>
-      </div>
-      <div style="padding:14px;background:var(--surface2);border-radius:var(--radius-sm);">
-        <div style="font-size:12px;font-weight:500;margin-bottom:6px;color:var(--accent)">Para planificar coberturas</div>
-        <div style="font-size:12px;color:var(--text2)">Consultá el fixture semanal para organizar qué partidos necesitan brief de preproducción.</div>
-      </div>
-      <div style="padding:14px;background:var(--surface2);border-radius:var(--radius-sm);">
-        <div style="font-size:12px;font-weight:500;margin-bottom:6px;color:var(--accent)">Rivalidades y clásicos</div>
-        <div style="font-size:12px;color:var(--text2)">Identificá los partidos de mayor impacto para priorizar recursos y contenido especial.</div>
-      </div>
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-header"><div class="card-title">Apertura 2026 — Resultados destacados</div><span class="pill pill-amber">Mercado Libre</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div class="partido-item"><div class="partido-fecha">29/01 · Fecha 1</div><div class="partido-titulo">Lanús 2 — 1 Unión</div><div class="partido-meta">Zona A</div></div>
+      <div class="partido-item"><div class="partido-fecha">22/02 · Fecha 4</div><div class="partido-titulo">Vélez 1 — 0 River</div><div class="partido-meta">Zona B · Interzonal</div></div>
+      <div class="partido-item"><div class="partido-fecha">14/02 · Fecha 3</div><div class="partido-titulo">Racing 2 — 0 Banfield</div><div class="partido-meta">Zona B</div></div>
+      <div class="partido-item"><div class="partido-fecha">15/02 · Fecha 3</div><div class="partido-titulo">Boca 0 — 0 Platense</div><div class="partido-meta">Zona A</div></div>
+    </div>
+    <div class="btn-row"><a href="https://www.promiedos.com.ar" target="_blank" class="btn btn-ghost" style="text-decoration:none">Ver fixture completo en Promiedos ↗</a></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+    <div style="background:rgba(232,255,71,0.06);border:1px solid rgba(232,255,71,0.2);border-radius:var(--radius);padding:18px;">
+      <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--accent);margin-bottom:6px">APERTURA 2026 · QUÉ QUEDA</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.8">📅 1 fecha regular pendiente (24 mayo)<br/>🏆 Playoffs: Cuartos, Semis y Final<br/>🗓️ Final estimada: fin de mayo 2026<br/>📺 Sponsor: Mercado Libre</div>
+    </div>
+    <div style="background:rgba(96,165,250,0.06);border:1px solid rgba(96,165,250,0.2);border-radius:var(--radius);padding:18px;">
+      <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--blue);margin-bottom:6px">CLAUSURA 2026 · LO QUE SE SABE</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.8">📅 Empieza después del Mundial 2026<br/>🌍 Mundial: 11 jun – 19 jul 2026<br/>⚽ Clausura arranca: julio 2026<br/>🔄 Localías invertidas del Apertura</div>
     </div>
   </div>
 </div>
 
 <!-- HISTÓRICOS -->
 <div id="historicos" class="page">
-  <div class="page-header">
-    <div class="page-eyebrow">Fútbol argentino</div>
-    <div class="page-title">Hitos históricos</div>
-    <div class="page-sub">Efemérides reales — Fuente: Efemérides Futboleras</div>
-  </div>
-
+  <div class="page-header"><div class="page-eyebrow">Fútbol argentino</div><div class="page-title">Hitos históricos</div><div class="page-sub">Efemérides reales · Fuente: Efemérides Futboleras</div></div>
   <a href="#" id="efem-mes-link" target="_blank" class="efem-link-card">
-    <div>
-      <div class="efem-link-title" id="efem-mes-titulo">Ver todas las efemérides de este mes ↗</div>
-      <div class="efem-link-sub">Fuente: efemeridesfutboleras.com.ar — datos reales verificados</div>
-    </div>
-    <div style="font-size:22px;color:var(--amber)">→</div>
+    <div><div style="font-size:13px;font-weight:500;color:var(--amber)" id="efem-mes-titulo">Ver todas las efemérides de este mes ↗</div><div style="font-size:11px;color:var(--text3);margin-top:2px">efemeridesfutboleras.com.ar</div></div>
+    <div style="font-size:20px;color:var(--amber)">→</div>
   </a>
-
   <div class="grid2">
     <div>
-      <div class="card" style="margin-bottom:16px">
-        <div class="card-header">
-          <div class="card-title">Efemérides de esta semana</div>
-          <span class="pill pill-amber">real</span>
-        </div>
-        <div id="efemerides-semana"></div>
-      </div>
-      <div class="card">
-        <div class="card-header"><div class="card-title">Buscar por fecha</div></div>
-        <div class="form-group">
-          <label class="form-label">Fecha</label>
-          <input type="date" id="hist-fecha" onchange="buscarEfemeride()"/>
-        </div>
-        <div id="hist-result" style="margin-top:12px;font-size:13px;color:var(--text2)"></div>
-      </div>
+      <div class="card" style="margin-bottom:14px"><div class="card-header"><div class="card-title">Esta semana</div><span class="pill pill-amber">real</span></div><div id="efemerides-semana"></div></div>
+      <div class="card"><div class="card-header"><div class="card-title">Buscar por fecha</div></div><div class="form-group"><label class="form-label">Fecha</label><input type="date" id="hist-fecha" onchange="buscarEfemeride()"/></div><div id="hist-result" style="margin-top:10px;font-size:13px;color:var(--text2)"></div></div>
     </div>
-    <div class="card">
-      <div class="card-header"><div class="card-title">Línea de tiempo — Grandes hitos AFA</div></div>
-      <div id="timeline-historicos" style="max-height:560px;overflow-y:auto;padding-right:4px"></div>
-    </div>
+    <div class="card"><div class="card-header"><div class="card-title">Línea de tiempo</div></div><div id="timeline-historicos" style="max-height:520px;overflow-y:auto;padding-right:4px"></div></div>
   </div>
 </div>
 
 <!-- CALENDARIO -->
 <div id="calendario" class="page">
-  <div class="page-header">
-    <div class="page-eyebrow">Gestión</div>
-    <div class="page-title">Calendario</div>
-    <div class="page-sub">Los días en <span style="color:var(--amber)">ámbar</span> tienen efemérides históricas</div>
-  </div>
+  <div class="page-header"><div class="page-eyebrow">Gestión</div><div class="page-title">Calendario</div><div class="page-sub"><span style="color:var(--accent)">●</span> Tus eventos &nbsp;<span style="color:var(--blue)">●</span> Partidos &nbsp;<span style="color:var(--amber)">●</span> Hitos históricos</div></div>
   <div class="grid2">
-    <div class="card"><div id="cal-container"></div></div>
+    <div>
+      <div class="card" style="margin-bottom:14px"><div id="cal-container"></div></div>
+      <div class="card"><div class="card-header"><div class="card-title">Partidos próximos</div></div><div id="partidos-proximos"></div></div>
+    </div>
     <div class="card">
       <div class="card-header"><div class="card-title">Agregar evento</div></div>
-      <div class="form-group"><label class="form-label">Evento</label><input type="text" id="ev-nombre" placeholder="Ej: River vs Boca"/></div>
+      <div class="form-group"><label class="form-label">Nombre</label><input type="text" id="ev-nombre" placeholder="Ej: Cobertura Superclásico"/></div>
       <div class="form-group"><label class="form-label">Fecha</label><input type="date" id="ev-fecha"/></div>
-      <div class="form-group"><label class="form-label">Tipo</label>
-        <select id="ev-tipo"><option>Partido</option><option>Contenido</option><option>Entrega</option><option>Reunión</option></select>
-      </div>
+      <div class="form-group"><label class="form-label">Tipo</label><select id="ev-tipo"><option>Partido a cubrir</option><option>Contenido</option><option>Entrega</option><option>Reunión</option><option>Otro</option></select></div>
       <div class="form-group"><label class="form-label">Notas</label><textarea id="ev-notas" placeholder="Detalles..."></textarea></div>
       <div class="btn-row"><button class="btn btn-accent" onclick="addEvent()">Guardar evento</button></div>
       <div class="divider"></div>
-      <div class="card-title" style="margin-bottom:14px">Eventos guardados</div>
+      <div class="card-title" style="margin-bottom:12px">Eventos guardados</div>
       <div id="ev-list"><div style="font-size:13px;color:var(--text3)">Sin eventos cargados</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CAMPAÑAS -->
+<div id="campanias" class="page">
+  <div class="page-header"><div class="page-eyebrow">Agencia LAUGH</div><div class="page-title">Propuestas de campaña</div><div class="page-sub">Brief · Guión · Presupuesto · Propuesta general</div></div>
+  <div class="grid2" style="margin-bottom:16px">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Campañas guardadas</div><button class="btn btn-accent" style="padding:6px 14px;font-size:12px" onclick="openNuevaCampana()">+ Nueva campaña</button></div>
+      <div id="campanias-list"><div style="font-size:13px;color:var(--text3);padding:10px 0">Sin campañas. Creá tu primera campaña arriba.</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Qué incluye cada plantilla</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="padding:12px;background:var(--surface2);border-radius:var(--radius-sm);"><div style="font-size:12px;font-weight:600;color:var(--accent);margin-bottom:4px">1. BRIEF</div><div style="font-size:12px;color:var(--text2)">Cliente, objetivo, público, mensaje clave, canales y restricciones.</div></div>
+        <div style="padding:12px;background:var(--surface2);border-radius:var(--radius-sm);"><div style="font-size:12px;font-weight:600;color:var(--blue);margin-bottom:4px">2. GUIÓN</div><div style="font-size:12px;color:var(--text2)">Estructura por segundos, escenas, texto en pantalla, música y CTA.</div></div>
+        <div style="padding:12px;background:var(--surface2);border-radius:var(--radius-sm);"><div style="font-size:12px;font-weight:600;color:var(--green);margin-bottom:4px">3. PRESUPUESTO</div><div style="font-size:12px;color:var(--text2)">Ítems de producción con total calculado automáticamente.</div></div>
+        <div style="padding:12px;background:var(--surface2);border-radius:var(--radius-sm);"><div style="font-size:12px;font-weight:600;color:var(--amber);margin-bottom:4px">4. PROPUESTA GENERAL</div><div style="font-size:12px;color:var(--text2)">Documento completo listo para presentarle al cliente.</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="card" id="campana-editor" style="display:none">
+    <div class="card-header"><div class="card-title" id="editor-titulo">Nueva campaña</div><button class="btn btn-ghost" style="padding:6px 12px;font-size:12px" onclick="guardarCampana()">Guardar campaña</button></div>
+    <div class="plantilla-tabs">
+      <button class="plantilla-tab active" onclick="showPlantilla('brief',this)">Brief</button>
+      <button class="plantilla-tab" onclick="showPlantilla('guion',this)">Guión</button>
+      <button class="plantilla-tab" onclick="showPlantilla('presupuesto',this)">Presupuesto</button>
+      <button class="plantilla-tab" onclick="showPlantilla('propuesta',this)">Propuesta general</button>
+    </div>
+    <!-- BRIEF -->
+    <div id="tab-brief" class="plantilla-content active">
+      <div class="grid2">
+        <div>
+          <div class="form-group"><label class="form-label">Nombre de la campaña</label><input type="text" id="b-nombre" placeholder="Ej: Campaña Superclásico Abril 2025"/></div>
+          <div class="form-group"><label class="form-label">Cliente</label><input type="text" id="b-cliente" placeholder="Ej: Club River Plate"/></div>
+          <div class="form-group"><label class="form-label">Objetivo</label><input type="text" id="b-objetivo" placeholder="Ej: Generar expectativa previa al Superclásico"/></div>
+          <div class="form-group"><label class="form-label">Público objetivo</label><input type="text" id="b-publico" placeholder="Ej: Hinchas 18-35 años, Instagram y TikTok"/></div>
+        </div>
+        <div>
+          <div class="form-group"><label class="form-label">Canales</label><input type="text" id="b-canales" placeholder="Ej: Instagram, TikTok, YouTube"/></div>
+          <div class="form-group"><label class="form-label">Mensaje clave</label><textarea id="b-mensaje" placeholder="El mensaje principal que querés transmitir..."></textarea></div>
+          <div class="form-group"><label class="form-label">Referencias</label><input type="text" id="b-referencias" placeholder="Ej: Campaña Adidas Copa del Mundo 2022"/></div>
+          <div class="form-group"><label class="form-label">Restricciones</label><input type="text" id="b-restricciones" placeholder="Ej: No usar imágenes de rivales"/></div>
+        </div>
+      </div>
+      <div class="btn-row"><button class="btn btn-accent" onclick="generarBrief()">Generar brief completo con IA ↗</button></div>
+      <div id="brief-output" style="display:none" class="ia-output"></div>
+    </div>
+    <!-- GUIÓN -->
+    <div id="tab-guion" class="plantilla-content">
+      <div class="grid2">
+        <div>
+          <div class="form-group"><label class="form-label">Formato</label><select id="g-formato"><option>Reel Instagram (60 seg)</option><option>TikTok (30-60 seg)</option><option>Story (15 seg)</option><option>Video YouTube (3-5 min)</option><option>Cobertura en vivo</option><option>Carrusel Instagram</option></select></div>
+          <div class="form-group"><label class="form-label">Tema / Partido</label><input type="text" id="g-tema" placeholder="Ej: Previa al Superclásico River vs Boca"/></div>
+          <div class="form-group"><label class="form-label">Tono</label><select id="g-tono"><option>Épico y emotivo</option><option>Informativo</option><option>Humorístico</option><option>Nostálgico / histórico</option><option>Urgente / en vivo</option></select></div>
+        </div>
+        <div>
+          <div class="form-group"><label class="form-label">Recursos disponibles</label><input type="text" id="g-recursos" placeholder="Ej: Cámara, drone, 2 camarógrafos"/></div>
+          <div class="form-group"><label class="form-label">CTA (llamada a la acción)</label><input type="text" id="g-cta" placeholder="Ej: Seguinos en Instagram"/></div>
+          <div class="form-group"><label class="form-label">Música / Estilo visual</label><input type="text" id="g-estilo" placeholder="Ej: Épica instrumental, blanco y negro"/></div>
+        </div>
+      </div>
+      <div class="btn-row"><button class="btn btn-accent" onclick="generarGuion()">Generar guión completo con IA ↗</button></div>
+      <div id="guion-output" style="display:none" class="ia-output"></div>
+    </div>
+    <!-- PRESUPUESTO -->
+    <div id="tab-presupuesto" class="plantilla-content">
+      <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:8px;font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;font-family:'DM Mono',monospace;"><span>Ítem</span><span>Detalle</span><span style="width:120px">Monto (ARS)</span></div>
+      <div id="presup-rows">
+        <div class="presup-row" style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:8px;"><input type="text" placeholder="Ej: Camarógrafo" class="pi-item"/><input type="text" placeholder="Ej: 1 día, 8hs" class="pi-det"/><input type="number" placeholder="50000" class="pi-monto" style="width:120px" oninput="calcTotal()"/></div>
+        <div class="presup-row" style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:8px;"><input type="text" placeholder="Ej: Editor de video" class="pi-item"/><input type="text" placeholder="Ej: Post producción 2hs" class="pi-det"/><input type="number" placeholder="30000" class="pi-monto" style="width:120px" oninput="calcTotal()"/></div>
+        <div class="presup-row" style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:8px;"><input type="text" placeholder="Ej: Alquiler drone" class="pi-item"/><input type="text" placeholder="Ej: Media jornada" class="pi-det"/><input type="number" placeholder="40000" class="pi-monto" style="width:120px" oninput="calcTotal()"/></div>
+      </div>
+      <button class="btn btn-ghost" style="font-size:12px;padding:6px 12px;margin-bottom:16px" onclick="addPresupRow()">+ Agregar ítem</button>
+      <div style="display:flex;justify-content:flex-end;align-items:center;gap:16px;padding:14px;background:var(--surface2);border-radius:var(--radius-sm);">
+        <span style="font-size:13px;color:var(--text2)">Total estimado:</span>
+        <span style="font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:var(--accent)" id="presup-total">$0</span>
+      </div>
+      <div class="btn-row"><button class="btn btn-accent" onclick="generarPresupuesto()">Analizar con IA ↗</button></div>
+      <div id="presupuesto-output" style="display:none" class="ia-output"></div>
+    </div>
+    <!-- PROPUESTA GENERAL -->
+    <div id="tab-propuesta" class="plantilla-content">
+      <div style="background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.15);border-radius:var(--radius-sm);padding:16px;margin-bottom:16px;"><div style="font-size:12px;font-weight:500;color:var(--amber);margin-bottom:4px">Tip</div><div style="font-size:12px;color:var(--text2)">Completá primero el Brief y el Presupuesto para que la IA tenga contexto y genere la propuesta completa.</div></div>
+      <div class="form-group"><label class="form-label">Título de la propuesta</label><input type="text" id="p-titulo" placeholder="Ej: Propuesta campaña digital — Superclásico 2025"/></div>
+      <div class="form-group"><label class="form-label">Presentado por</label><input type="text" id="p-presentado" placeholder="LAUGH — Agencia de Marketing Deportivo" value="LAUGH — Agencia de Marketing Deportivo"/></div>
+      <div class="form-group"><label class="form-label">Fecha</label><input type="date" id="p-fecha"/></div>
+      <div class="form-group"><label class="form-label">Notas adicionales</label><textarea id="p-notas" placeholder="Algún contexto extra para el cliente..."></textarea></div>
+      <div class="btn-row"><button class="btn btn-accent" onclick="generarPropuesta()">Generar propuesta completa con IA ↗</button></div>
+      <div id="propuesta-output" style="display:none" class="ia-output"></div>
     </div>
   </div>
 </div>
 
 <!-- CONTENIDO -->
 <div id="contenido" class="page">
-  <div class="page-header">
-    <div class="page-eyebrow">Agencia</div>
-    <div class="page-title">Pipeline de contenido</div>
-    <div class="page-sub">Gestión de piezas y preproducción</div>
-  </div>
-  <div class="card" style="margin-bottom:16px">
-    <div class="card-header">
-      <div class="card-title">Piezas activas</div>
-      <button class="btn btn-ghost" style="padding:6px 12px;font-size:12px" onclick="addPieza()">+ Agregar</button>
-    </div>
+  <div class="page-header"><div class="page-eyebrow">Agencia</div><div class="page-title">Pipeline de contenido</div><div class="page-sub">Gestión de piezas y preproducción</div></div>
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-header"><div class="card-title">Piezas activas</div><button class="btn btn-ghost" style="padding:6px 12px;font-size:12px" onclick="addPieza()">+ Agregar</button></div>
     <table>
       <thead><tr><th>#</th><th>Pieza</th><th>Formato</th><th>Vencimiento</th><th>Estado</th><th></th></tr></thead>
       <tbody id="content-table">
-        <tr><td style="color:var(--text3);font-family:'DM Mono',monospace;font-size:11px">01</td><td>Reel previa Superclásico</td><td><span class="tag" style="background:var(--blue-bg);color:var(--blue)">Reel IG</span></td><td style="font-family:'DM Mono',monospace;font-size:12px">27/04</td><td><span class="pill pill-amber">Revisión</span></td><td><button class="btn btn-ghost" style="padding:3px 10px;font-size:11px" onclick="toggleEstado(this)">✓</button></td></tr>
-        <tr><td style="color:var(--text3);font-family:'DM Mono',monospace;font-size:11px">02</td><td>Story previa fecha 12</td><td><span class="tag" style="background:var(--surface3);color:var(--text2)">Story</span></td><td style="font-family:'DM Mono',monospace;font-size:12px">28/04</td><td><span class="pill pill-gray">Pendiente</span></td><td><button class="btn btn-ghost" style="padding:3px 10px;font-size:11px" onclick="toggleEstado(this)">✓</button></td></tr>
-        <tr><td style="color:var(--text3);font-family:'DM Mono',monospace;font-size:11px">03</td><td>Carrusel estadísticas</td><td><span class="tag" style="background:var(--surface3);color:var(--text2)">Carrusel</span></td><td style="font-family:'DM Mono',monospace;font-size:12px">29/04</td><td><span class="pill pill-gray">Pendiente</span></td><td><button class="btn btn-ghost" style="padding:3px 10px;font-size:11px" onclick="toggleEstado(this)">✓</button></td></tr>
-        <tr><td style="color:var(--text3);font-family:'DM Mono',monospace;font-size:11px">04</td><td>Video resumen fecha</td><td><span class="tag" style="background:var(--surface3);color:var(--text2)">YouTube</span></td><td style="font-family:'DM Mono',monospace;font-size:12px">02/05</td><td><span class="pill pill-green">Listo</span></td><td><button class="btn btn-ghost" style="padding:3px 10px;font-size:11px" onclick="toggleEstado(this)">✓</button></td></tr>
+        <tr><td style="color:var(--text3);font-family:'DM Mono',monospace;font-size:11px">01</td><td>Reel previa Superclásico</td><td><span class="tag" style="background:var(--blue-bg);color:var(--blue)">Reel IG</span></td><td style="font-family:'DM Mono',monospace;font-size:12px">27/04</td><td><span class="pill pill-amber">Revisión</span></td><td><button class="btn btn-ghost" style="padding:3px 8px;font-size:11px" onclick="toggleEstado(this)">✓</button></td></tr>
+        <tr><td style="color:var(--text3);font-family:'DM Mono',monospace;font-size:11px">02</td><td>Story previa fecha</td><td><span class="tag" style="background:var(--surface3);color:var(--text2)">Story</span></td><td style="font-family:'DM Mono',monospace;font-size:12px">28/04</td><td><span class="pill pill-gray">Pendiente</span></td><td><button class="btn btn-ghost" style="padding:3px 8px;font-size:11px" onclick="toggleEstado(this)">✓</button></td></tr>
+        <tr><td style="color:var(--text3);font-family:'DM Mono',monospace;font-size:11px">03</td><td>Carrusel estadísticas</td><td><span class="tag" style="background:var(--surface3);color:var(--text2)">Carrusel</span></td><td style="font-family:'DM Mono',monospace;font-size:12px">29/04</td><td><span class="pill pill-gray">Pendiente</span></td><td><button class="btn btn-ghost" style="padding:3px 8px;font-size:11px" onclick="toggleEstado(this)">✓</button></td></tr>
+        <tr><td style="color:var(--text3);font-family:'DM Mono',monospace;font-size:11px">04</td><td>Video resumen fecha</td><td><span class="tag" style="background:var(--red-bg);color:var(--red)">YouTube</span></td><td style="font-family:'DM Mono',monospace;font-size:12px">02/05</td><td><span class="pill pill-green">Listo</span></td><td><button class="btn btn-ghost" style="padding:3px 8px;font-size:11px" onclick="toggleEstado(this)">✓</button></td></tr>
       </tbody>
     </table>
   </div>
   <div class="card">
-    <div class="card-header"><div class="card-title">Generador de propuesta de preproducción</div></div>
+    <div class="card-header"><div class="card-title">Generador de preproducción</div></div>
     <div class="grid2">
-      <div>
-        <div class="form-group"><label class="form-label">Evento</label><input type="text" id="pp-evento" placeholder="Ej: Superclásico River vs Boca"/></div>
-        <div class="form-group"><label class="form-label">Formato</label>
-          <select id="pp-formato"><option>Reel Instagram</option><option>Story</option><option>Carrusel</option><option>Video YouTube</option><option>Cobertura en vivo</option><option>TikTok</option></select>
-        </div>
-      </div>
-      <div>
-        <div class="form-group"><label class="form-label">Objetivo</label><input type="text" id="pp-objetivo" placeholder="Ej: Generar expectativa previa"/></div>
-        <div class="form-group"><label class="form-label">Recursos</label><input type="text" id="pp-recursos" placeholder="Ej: Cámara, drone, 2 personas"/></div>
-      </div>
+      <div><div class="form-group"><label class="form-label">Evento</label><input type="text" id="pp-evento" placeholder="Ej: Superclásico River vs Boca"/></div><div class="form-group"><label class="form-label">Formato</label><select id="pp-formato"><option>Reel Instagram</option><option>Story</option><option>Carrusel</option><option>Video YouTube</option><option>Cobertura en vivo</option><option>TikTok</option></select></div></div>
+      <div><div class="form-group"><label class="form-label">Objetivo</label><input type="text" id="pp-objetivo" placeholder="Ej: Generar expectativa previa"/></div><div class="form-group"><label class="form-label">Recursos</label><input type="text" id="pp-recursos" placeholder="Ej: Cámara, drone, 2 personas"/></div></div>
     </div>
-    <div class="btn-row"><button class="btn btn-accent" onclick="generarPP()">Generar propuesta con IA ↗</button></div>
+    <div class="btn-row"><button class="btn btn-accent" onclick="generarPP()">Generar con IA ↗</button></div>
     <div id="pp-output" style="display:none" class="ia-output"></div>
   </div>
 </div>
 
 <!-- PROGRESO -->
 <div id="progreso" class="page">
-  <div class="page-header">
-    <div class="page-eyebrow">Performance</div>
-    <div class="page-title">Progreso & KPIs</div>
-    <div class="page-sub">Redes sociales · Tareas del equipo</div>
-  </div>
-  <div class="card" style="margin-bottom:16px">
+  <div class="page-header"><div class="page-eyebrow">Performance</div><div class="page-title">Progreso y KPIs</div><div class="page-sub">Redes sociales · Tareas del equipo</div></div>
+  <div class="card" style="margin-bottom:14px">
     <div class="card-header"><div class="card-title">KPIs de redes sociales</div><button class="btn btn-ghost" style="padding:6px 12px;font-size:12px" onclick="editKPIs()">Editar</button></div>
     <div class="grid4">
       <div class="kpi-card"><div class="kpi-platform">Instagram · Seguidores</div><div class="kpi-value" id="k-ig-seg">12.4k</div><div class="kpi-change up">↑ +340 esta semana</div></div>
-      <div class="kpi-card"><div class="kpi-platform">Instagram · Alcance</div><div class="kpi-value" id="k-ig-alc">48.2k</div><div class="kpi-change up">↑ +12% vs semana ant.</div></div>
+      <div class="kpi-card"><div class="kpi-platform">Instagram · Alcance</div><div class="kpi-value" id="k-ig-alc">48.2k</div><div class="kpi-change up">↑ +12%</div></div>
       <div class="kpi-card"><div class="kpi-platform">Instagram · Engagement</div><div class="kpi-value" id="k-ig-eng">4.8%</div><div class="kpi-change up">↑ +0.3pts</div></div>
       <div class="kpi-card"><div class="kpi-platform">TikTok · Seguidores</div><div class="kpi-value" id="k-tt-seg">3.1k</div><div class="kpi-change up">↑ +220 esta semana</div></div>
     </div>
@@ -418,9 +416,9 @@
   <div class="grid2">
     <div class="card">
       <div class="card-header"><div class="card-title">Objetivos del mes</div></div>
-      <div style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;font-size:13px"><span>Seguidores Instagram</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text2)">12.4k / 15k</span></div><div class="progress-bar"><div class="progress-fill" style="width:83%"></div></div></div>
-      <div style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;font-size:13px"><span>Piezas publicadas</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text2)">18 / 25</span></div><div class="progress-bar"><div class="progress-fill green" style="width:72%"></div></div></div>
-      <div style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;font-size:13px"><span>Engagement promedio</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text2)">4.8% / 5%</span></div><div class="progress-bar"><div class="progress-fill blue" style="width:96%"></div></div></div>
+      <div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:13px"><span>Seguidores Instagram</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text2)">12.4k / 15k</span></div><div class="progress-bar"><div class="progress-fill" style="width:83%"></div></div></div>
+      <div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:13px"><span>Piezas publicadas</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text2)">18 / 25</span></div><div class="progress-bar"><div class="progress-fill green" style="width:72%"></div></div></div>
+      <div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:13px"><span>Engagement promedio</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text2)">4.8% / 5%</span></div><div class="progress-bar"><div class="progress-fill blue" style="width:96%"></div></div></div>
       <div><div style="display:flex;justify-content:space-between;font-size:13px"><span>Coberturas en vivo</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text2)">2 / 4</span></div><div class="progress-bar"><div class="progress-fill amber" style="width:50%"></div></div></div>
     </div>
     <div class="card">
@@ -430,26 +428,21 @@
         <div class="task-row"><div class="task-check" onclick="toggleTask(this)"><svg viewBox="0 0 12 12" fill="black"><path d="M2 6l3 3 5-5"/></svg></div><div class="task-name">Subir reel previa</div><div class="task-due">27/04</div></div>
         <div class="task-row"><div class="task-check" onclick="toggleTask(this)"><svg viewBox="0 0 12 12" fill="black"><path d="M2 6l3 3 5-5"/></svg></div><div class="task-name">Contactar proveedor audio</div><div class="task-due">28/04</div></div>
         <div class="task-row"><div class="task-check" onclick="toggleTask(this)"><svg viewBox="0 0 12 12" fill="black"><path d="M2 6l3 3 5-5"/></svg></div><div class="task-name">Informe mensual cliente A</div><div class="task-due">30/04</div></div>
-        <div class="task-row"><div class="task-check" onclick="toggleTask(this)"><svg viewBox="0 0 12 12" fill="black"><path d="M2 6l3 3 5-5"/></svg></div><div class="task-name">Cargar estadísticas semana</div><div class="task-due">29/04</div></div>
       </div>
-      <div style="margin-top:14px;font-size:12px;color:var(--text3);font-family:'DM Mono',monospace" id="task-summary"></div>
+      <div style="margin-top:12px;font-size:12px;color:var(--text3);font-family:'DM Mono',monospace" id="task-summary"></div>
     </div>
   </div>
 </div>
 
 <!-- OPERACIONES -->
 <div id="operaciones" class="page">
-  <div class="page-header">
-    <div class="page-eyebrow">Administración</div>
-    <div class="page-title">Operaciones</div>
-    <div class="page-sub">Facturación y comparativa de presupuestos</div>
-  </div>
+  <div class="page-header"><div class="page-eyebrow">Administración</div><div class="page-title">Operaciones</div><div class="page-sub">Facturación y presupuestos</div></div>
   <div class="metrics-row" style="grid-template-columns:repeat(3,1fr)">
     <div class="metric-card"><div class="metric-label">Facturado (Abril)</div><div class="metric-value">$340k</div><div class="metric-note">ARS</div></div>
     <div class="metric-card accent"><div class="metric-label">Cobrado</div><div class="metric-value">$160k</div><div class="metric-note">2 facturas</div></div>
     <div class="metric-card"><div class="metric-label">Pendiente</div><div class="metric-value">$180k</div><div class="metric-note">2 facturas</div></div>
   </div>
-  <div class="card" style="margin-bottom:16px">
+  <div class="card" style="margin-bottom:14px">
     <div class="card-header"><div class="card-title">Facturas</div><button class="btn btn-ghost" style="padding:6px 12px;font-size:12px" onclick="addFactura()">+ Nueva</button></div>
     <table>
       <thead><tr><th>Cliente</th><th>Concepto</th><th>Período</th><th>Monto</th><th>Estado</th></tr></thead>
@@ -457,46 +450,37 @@
         <tr><td>Cliente A</td><td>Community management</td><td style="font-family:'DM Mono',monospace;font-size:12px">Abr 2025</td><td style="font-family:'DM Mono',monospace">$80.000</td><td><span class="pill pill-green">Pagado</span></td></tr>
         <tr><td>Cliente B</td><td>Producción audiovisual</td><td style="font-family:'DM Mono',monospace;font-size:12px">Abr 2025</td><td style="font-family:'DM Mono',monospace">$120.000</td><td><span class="pill pill-amber">Pendiente</span></td></tr>
         <tr><td>Cliente C</td><td>Community management</td><td style="font-family:'DM Mono',monospace;font-size:12px">Mar 2025</td><td style="font-family:'DM Mono',monospace">$60.000</td><td><span class="pill pill-amber">Pendiente</span></td></tr>
-        <tr><td>Cliente A</td><td>Community management</td><td style="font-family:'DM Mono',monospace;font-size:12px">Mar 2025</td><td style="font-family:'DM Mono',monospace">$80.000</td><td><span class="pill pill-green">Pagado</span></td></tr>
       </tbody>
     </table>
   </div>
   <div class="card">
     <div class="card-header"><div class="card-title">Comparativa de presupuestos</div></div>
     <div class="grid3">
-      <div><div class="form-group"><label class="form-label">Proveedor 1</label><input type="text" class="prov-nombre" placeholder="Nombre"/></div><div class="form-group"><label class="form-label">Monto</label><input type="number" class="prov-monto" placeholder="45000"/></div><div class="form-group"><label class="form-label">Detalle</label><textarea class="prov-detalle" style="min-height:60px" placeholder="Qué incluye..."></textarea></div></div>
-      <div><div class="form-group"><label class="form-label">Proveedor 2</label><input type="text" class="prov-nombre" placeholder="Nombre"/></div><div class="form-group"><label class="form-label">Monto</label><input type="number" class="prov-monto" placeholder="72000"/></div><div class="form-group"><label class="form-label">Detalle</label><textarea class="prov-detalle" style="min-height:60px" placeholder="Qué incluye..."></textarea></div></div>
-      <div><div class="form-group"><label class="form-label">Proveedor 3</label><input type="text" class="prov-nombre" placeholder="Nombre"/></div><div class="form-group"><label class="form-label">Monto</label><input type="number" class="prov-monto" placeholder="98000"/></div><div class="form-group"><label class="form-label">Detalle</label><textarea class="prov-detalle" style="min-height:60px" placeholder="Qué incluye..."></textarea></div></div>
+      <div><div class="form-group"><label class="form-label">Proveedor 1</label><input type="text" class="prov-nombre" placeholder="Nombre"/></div><div class="form-group"><label class="form-label">Monto</label><input type="number" class="prov-monto" placeholder="45000"/></div><div class="form-group"><label class="form-label">Detalle</label><textarea class="prov-detalle" style="min-height:55px" placeholder="Qué incluye..."></textarea></div></div>
+      <div><div class="form-group"><label class="form-label">Proveedor 2</label><input type="text" class="prov-nombre" placeholder="Nombre"/></div><div class="form-group"><label class="form-label">Monto</label><input type="number" class="prov-monto" placeholder="72000"/></div><div class="form-group"><label class="form-label">Detalle</label><textarea class="prov-detalle" style="min-height:55px" placeholder="Qué incluye..."></textarea></div></div>
+      <div><div class="form-group"><label class="form-label">Proveedor 3</label><input type="text" class="prov-nombre" placeholder="Nombre"/></div><div class="form-group"><label class="form-label">Monto</label><input type="number" class="prov-monto" placeholder="98000"/></div><div class="form-group"><label class="form-label">Detalle</label><textarea class="prov-detalle" style="min-height:55px" placeholder="Qué incluye..."></textarea></div></div>
     </div>
     <div class="btn-row"><button class="btn btn-accent" onclick="analizarPresupuestos()">Analizar con IA ↗</button></div>
-    <div id="presup-output" style="display:none" class="ia-output"></div>
+    <div id="presup-output-op" style="display:none" class="ia-output"></div>
   </div>
 </div>
 
-<!-- ASISTENTE IA -->
+<!-- ASISTENTE -->
 <div id="asistente" class="page">
-  <div class="page-header">
-    <div class="page-eyebrow">IA especializada</div>
-    <div class="page-title">Asistente IA</div>
-    <div class="page-sub">Entrenado para LAUGH · Fútbol argentino · AFA</div>
-  </div>
+  <div class="page-header"><div class="page-eyebrow">IA especializada</div><div class="page-title">Asistente IA</div><div class="page-sub">Entrenado para LAUGH · Fútbol argentino · AFA</div></div>
   <div class="card">
-    <div class="card-header"><div class="card-title">Acciones frecuentes</div></div>
     <div class="ia-chips">
-      <button class="ia-chip" onclick="setIA('Armame un calendario editorial de fútbol para mayo 2025 con la Liga Profesional Argentina. Incluí fechas de partidos y sugerencias de contenido.')">Calendario editorial</button>
+      <button class="ia-chip" onclick="setIA('Armame un calendario editorial de fútbol para mayo 2025 con la Liga Profesional Argentina')">Calendario editorial</button>
       <button class="ia-chip" onclick="setIA('Generame 10 ideas de contenido para Instagram sobre el próximo Superclásico River vs Boca')">Ideas Superclásico</button>
       <button class="ia-chip" onclick="setIA('Armame un brief de preproducción para la cobertura en vivo de un partido de la Liga Profesional')">Brief cobertura</button>
-      <button class="ia-chip" onclick="setIA('¿Qué efemérides y fechas históricas del fútbol argentino caen esta semana? Dame ideas de contenido para cada una.')">Efemérides esta semana</button>
-      <button class="ia-chip" onclick="setIA('Redactame un mail profesional para presentarme como nuevo integrante del equipo a un cliente de la agencia LAUGH')">Mail cliente nuevo</button>
+      <button class="ia-chip" onclick="setIA('Qué efemérides del fútbol argentino caen esta semana? Dame ideas de contenido para cada una.')">Efemérides esta semana</button>
+      <button class="ia-chip" onclick="setIA('Redactame un mail profesional para presentarme como nuevo integrante del equipo a un cliente de LAUGH')">Mail cliente nuevo</button>
       <button class="ia-chip" onclick="setIA('Armame una plantilla de informe mensual de redes sociales para una agencia de marketing deportivo')">Informe mensual</button>
       <button class="ia-chip" onclick="setIA('Cuáles son las mejores estrategias para hacer cobertura en vivo de fútbol en Instagram Stories en 2025?')">Tips de cobertura</button>
-      <button class="ia-chip" onclick="setIA('Dame los partidos más importantes e históricos entre River Plate y Boca Juniors para generar contenido de efemérides')">Historia Superclásico</button>
+      <button class="ia-chip" onclick="setIA('Dame los partidos más históricos entre River y Boca para generar contenido de efemérides')">Historia Superclásico</button>
     </div>
-    <div class="form-group"><label class="form-label">Tu consulta</label><textarea id="ia-input" placeholder="Escribí lo que necesitás..." style="min-height:110px"></textarea></div>
-    <div class="btn-row">
-      <button class="btn btn-accent" onclick="runIA()">Generar ↗</button>
-      <button class="btn btn-ghost" onclick="clearIA()">Limpiar</button>
-    </div>
+    <div class="form-group"><label class="form-label">Tu consulta</label><textarea id="ia-input" placeholder="Escribí lo que necesitás..." style="min-height:100px"></textarea></div>
+    <div class="btn-row"><button class="btn btn-accent" onclick="runIA()">Generar ↗</button><button class="btn btn-ghost" onclick="clearIA()">Limpiar</button></div>
     <div id="ia-output" class="ia-output" style="display:none"></div>
   </div>
 </div>
@@ -506,361 +490,218 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ===== DATOS REALES DE EFEMÉRIDES =====
-// Fuente: efemeridesfutboleras.com.ar
-const EFEMERIDES = [
-  // ABRIL
+const EFEMERIDES=[
   {fecha:'01/04',año:1908,titulo:'Fundación de San Lorenzo de Almagro',club:'San Lorenzo',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-1-abril-se-fundo-san-lorenzo.html'},
-  {fecha:'03/04',año:1905,titulo:'Fundación del Club Atlético Boca Juniors',club:'Boca Juniors',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-3-abril-el-dia-que-se-fundo.html'},
-  {fecha:'08/04',año:2000,titulo:'El primer "Topo Gigio" de Juan Román Riquelme',club:'Boca Juniors',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-8-abril-el-primer-topo-gigio.html'},
+  {fecha:'03/04',año:1905,titulo:'Fundación de Boca Juniors',club:'Boca Juniors',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-3-abril-el-dia-que-se-fundo.html'},
+  {fecha:'08/04',año:2000,titulo:'El primer Topo Gigio de Riquelme',club:'Boca Juniors',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-8-abril-el-primer-topo-gigio.html'},
   {fecha:'10/04',año:1981,titulo:'Boca 3 - River 0, Superclásico histórico en el Metro',club:'Boca Juniors',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-10-abril-boca-3-river-0.html'},
-  {fecha:'12/04',año:2006,titulo:'Palermo se convierte en el máximo goleador histórico de Boca',club:'Boca Juniors',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-12-abril-palermo-el-maximo.html'},
-  {fecha:'15/04',año:1965,titulo:'Independiente "Rojo de América" gana su 2da Copa Libertadores',club:'Independiente',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-15-abril-el-rojo-de-america.html'},
-  {fecha:'18/04',año:2007,titulo:'Messi emula a Maradona con golazo al Getafe en la Copa del Rey',club:'Selección',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-18-abril-la-noche-que-lionel.html'},
-  {fecha:'19/04',año:1960,titulo:'Se jugó el primer partido de la Copa Libertadores de América',club:'AFA',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-19-abril-se-jugo-el-primer.html'},
-  {fecha:'20/04',año:1960,titulo:'San Lorenzo y el debut argentino en la Copa Libertadores',club:'San Lorenzo',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-20-abril-san-lorenzo-y-el.html'},
-  {fecha:'22/04',año:1906,titulo:'Racing vs River: el clásico más antiguo de la Argentina',club:'Racing Club',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-22-abril-racing-river-el.html'},
-  {fecha:'24/04',año:1983,titulo:'Enzo Francescoli debuta en River Plate',club:'River Plate',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-24-de-abril-francescoli-se.html'},
-  {fecha:'26/04',año:1949,titulo:'Nació Carlos Bianchi, el DT más ganador del fútbol argentino',club:'Boca Juniors',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-26-abril-nacio-carlos.html'},
-  {fecha:'27/04',año:1983,titulo:'Primer gol de Enzo Francescoli en River Plate',club:'River Plate',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-27-abril-primer-gol-de-enzo.html'},
-  {fecha:'28/04',año:1995,titulo:'Argentina ganó el Mundial Sub 20 de Qatar — DT Pekerman',club:'Selección',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-28-abril-argentina-gano-el.html'},
+  {fecha:'12/04',año:2006,titulo:'Palermo, máximo goleador histórico de Boca',club:'Boca Juniors',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-12-abril-palermo-el-maximo.html'},
+  {fecha:'19/04',año:1960,titulo:'Primer partido de la Copa Libertadores de América',club:'AFA',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-19-abril-se-jugo-el-primer.html'},
+  {fecha:'22/04',año:1906,titulo:'Racing vs River, el clásico más antiguo de Argentina',club:'Racing Club',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-22-abril-racing-river-el.html'},
+  {fecha:'26/04',año:1949,titulo:'Nació Carlos Bianchi, el DT más ganador de Boca',club:'Boca Juniors',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-26-abril-nacio-carlos.html'},
+  {fecha:'27/04',año:1983,titulo:'Primer gol de Francescoli en River Plate',club:'River Plate',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-27-abril-primer-gol-de-enzo.html'},
+  {fecha:'28/04',año:1995,titulo:'Argentina ganó el Mundial Sub 20 de Qatar',club:'Selección',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-28-abril-argentina-gano-el.html'},
   {fecha:'29/04',año:1985,titulo:'Argentina ganó en el Maracaná después de 41 años',club:'Selección',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-29-abril-argentina-gano-en.html'},
-  {fecha:'30/04',año:1908,titulo:'River Plate jugó el primer partido oficial de su historia',club:'River Plate',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-30-abril-river-jugo-el.html'},
-  // MAYO
-  {fecha:'01/05',año:1966,titulo:'Debut del "Pato" Fillol, el mejor arquero argentino',club:'River Plate',link:'https://www.efemeridesfutboleras.com.ar/2014/05/efemerides-1-mayo-debuto-en-primera-el.html'},
-  {fecha:'04/05',año:1961,titulo:'Independiente hace su debut en la Copa Libertadores',club:'Independiente',link:'https://www.efemeridesfutboleras.com.ar/2014/05/efemerides-4-mayo-independiente-debuto.html'},
+  {fecha:'30/04',año:1908,titulo:'River jugó el primer partido oficial de su historia',club:'River Plate',link:'https://www.efemeridesfutboleras.com.ar/2014/04/efemerides-30-abril-river-jugo-el.html'},
+  {fecha:'01/05',año:1966,titulo:"Debut del Pato Fillol, el mejor arquero argentino",club:'River Plate',link:'https://www.efemeridesfutboleras.com.ar/2014/05/efemerides-1-mayo-debuto-en-primera-el.html'},
+  {fecha:'04/05',año:1961,titulo:'Independiente debuta en la Copa Libertadores',club:'Independiente',link:'https://www.efemeridesfutboleras.com.ar/2014/05/efemerides-4-mayo-independiente-debuto.html'},
   {fecha:'05/05',año:1991,titulo:'Bochini jugó su último partido en Independiente',club:'Independiente',link:'https://www.efemeridesfutboleras.com.ar/2014/05/efemerides-5-mayo-ricardo-bochini-jugo.html'},
-  {fecha:'06/05',año:1933,titulo:'Debutaron Erico en Independiente y Amadeo Carrizo en River',club:'Independiente / River',link:'https://www.efemeridesfutboleras.com.ar/2014/05/efemerides-6-mayo-debutaron-erico-en-el.html'},
-  {fecha:'07/05',año:1916,titulo:'Se inauguró el Viejo Gasómetro, el Templo de Boedo',club:'San Lorenzo',link:'https://www.efemeridesfutboleras.com.ar/2014/05/efemerides-7-mayo-se-inauguro-el-viejo.html'},
-  {fecha:'18/05',año:1931,titulo:'Fundación de la Liga Argentina de Football — inicio del profesionalismo',club:'AFA',link:'https://www.efemeridesfutboleras.com.ar/2015/05/efemerides-futboleras-del-mes-de-mayo.html'},
-  {fecha:'25/05',año:1986,titulo:'Argentina campeón del Mundo — Diego Maradona en México',club:'Selección',link:'https://www.efemeridesfutboleras.com.ar/2014/06/efemerides-futboleras-del-mes-de-junio.html'},
-  // AFA
-  {fecha:'21/02',año:1893,titulo:'Fundación de la AFA — Alejandro Watson Hutton',club:'AFA',link:'https://www.efemeridesfutboleras.com.ar/'},
-  {fecha:'02/06',año:1978,titulo:'Argentina campeón del Mundo — Mario Kempes en el Monumental',club:'Selección',link:'https://www.efemeridesfutboleras.com.ar/2014/06/efemerides-futboleras-del-mes-de-junio.html'},
-  {fecha:'18/12',año:2022,titulo:'Argentina campeón del Mundo por tercera vez — Qatar 2022',club:'Selección',link:'https://www.efemeridesfutboleras.com.ar/'},
+  {fecha:'07/05',año:1916,titulo:'Se inauguró el Viejo Gasómetro, Templo de Boedo',club:'San Lorenzo',link:'https://www.efemeridesfutboleras.com.ar/2014/05/efemerides-7-mayo-se-inauguro-el-viejo.html'},
+  {fecha:'18/05',año:1931,titulo:'Inicio del profesionalismo en el fútbol argentino',club:'AFA',link:'https://www.efemeridesfutboleras.com.ar/2015/05/efemerides-futboleras-del-mes-de-mayo.html'},
+  {fecha:'21/02',año:1893,titulo:'Fundación de la AFA por Alejandro Watson Hutton',club:'AFA',link:'https://www.efemeridesfutboleras.com.ar/'},
+  {fecha:'25/05',año:1986,titulo:'Argentina campeón del Mundo, Maradona en México',club:'Selección',link:'https://www.efemeridesfutboleras.com.ar/2014/06/efemerides-futboleras-del-mes-de-junio.html'},
+  {fecha:'02/06',año:1978,titulo:'Argentina campeón del Mundo, Kempes en el Monumental',club:'Selección',link:'https://www.efemeridesfutboleras.com.ar/2014/06/efemerides-futboleras-del-mes-de-junio.html'},
+  {fecha:'18/12',año:2022,titulo:'Argentina campeón del Mundo por tercera vez, Qatar 2022',club:'Selección',link:'https://www.efemeridesfutboleras.com.ar/'},
 ];
+// Apertura 2026 — resultados reales + última fecha pendiente
+const PARTIDOS_2025=[
+  // Apertura 2026 — resultados jugados
+  {fecha:'2026-01-29',local:'Lanús',visitante:'Unión',resultado:'2-1',torneo:'Apertura 2026'},
+  {fecha:'2026-01-29',local:'Dep. Riestra',visitante:'Def. y Justicia',resultado:'0-1',torneo:'Apertura 2026'},
+  {fecha:'2026-01-29',local:'Belgrano',visitante:'Tigre',resultado:'1-1',torneo:'Apertura 2026'},
+  {fecha:'2026-02-14',local:'Racing',visitante:'Banfield',resultado:'2-0',torneo:'Apertura 2026'},
+  {fecha:'2026-02-15',local:'Boca',visitante:'Platense',resultado:'0-0',torneo:'Apertura 2026'},
+  {fecha:'2026-02-15',local:'Rosario Central',visitante:'Barracas',resultado:'2-0',torneo:'Apertura 2026'},
+  {fecha:'2026-02-20',local:'Boca',visitante:'Racing',resultado:'0-0',torneo:'Apertura 2026'},
+  {fecha:'2026-02-21',local:'Ind. Rivadavia',visitante:'Independiente',resultado:'3-2',torneo:'Apertura 2026'},
+  {fecha:'2026-02-22',local:'Vélez',visitante:'River',resultado:'1-0',torneo:'Apertura 2026'},
+  {fecha:'2026-02-22',local:'San Lorenzo',visitante:'Est. RC',resultado:'2-0',torneo:'Apertura 2026'},
+  // Última fecha regular Apertura 2026 (~24 mayo) — a confirmar
+  {fecha:'2026-05-24',local:'River',visitante:'Atlético Tucumán',resultado:'?',torneo:'Apertura 2026 · Última fecha'},
+  {fecha:'2026-05-24',local:'Boca',visitante:'Central Córdoba',resultado:'?',torneo:'Apertura 2026 · Última fecha'},
+  {fecha:'2026-05-24',local:'San Lorenzo',visitante:'Independiente',resultado:'?',torneo:'Apertura 2026 · Última fecha'},
+  {fecha:'2026-05-24',local:'Racing',visitante:'Huracán',resultado:'?',torneo:'Apertura 2026 · Última fecha'},
+  // Mundial 2026 — Argentina
+  {fecha:'2026-06-16',local:'Argentina',visitante:'Argelia',resultado:'Mundial 2026 · Grupo J',torneo:'🌍 Mundial'},
+  {fecha:'2026-06-22',local:'Argentina',visitante:'Austria',resultado:'Mundial 2026 · Grupo J',torneo:'🌍 Mundial'},
+  {fecha:'2026-06-28',local:'Argentina',visitante:'Jordania',resultado:'Mundial 2026 · Grupo J',torneo:'🌍 Mundial'},
+  // Clausura 2026 — fixture conocido (localías invertidas, julio-diciembre)
+  {fecha:'2026-07-20',local:'Platense',visitante:'Estudiantes',resultado:'Clausura 2026 · Fecha 1',torneo:'Clausura 2026'},
+  {fecha:'2026-07-20',local:'Newell\'s',visitante:'Vélez',resultado:'Clausura 2026 · Fecha 1',torneo:'Clausura 2026'},
+  {fecha:'2026-07-20',local:'Independiente',visitante:'San Lorenzo',resultado:'Clausura 2026 · Fecha 1',torneo:'Clausura 2026'},
+  {fecha:'2026-07-20',local:'Boca',visitante:'Dep. Riestra',resultado:'Clausura 2026 · Fecha 1',torneo:'Clausura 2026'},
+  {fecha:'2026-07-26',local:'River',visitante:'Vélez',resultado:'Clausura 2026 · Superclásico interzonal',torneo:'Clausura 2026'},
+  {fecha:'2026-08-09',local:'Boca',visitante:'Racing',resultado:'Clausura 2026',torneo:'Clausura 2026'},
+  {fecha:'2026-08-09',local:'River',visitante:'Gimnasia',resultado:'Clausura 2026',torneo:'Clausura 2026'},
+  {fecha:'2026-09-13',local:'Newell\'s',visitante:'Rosario Central',resultado:'Clausura 2026 · Interzonal',torneo:'Clausura 2026'},
+  {fecha:'2026-10-11',local:'Independiente',visitante:'Racing',resultado:'Clausura 2026 · Interzonal',torneo:'Clausura 2026'},
+];
+const EFEM_URLS={0:'https://www.efemeridesfutboleras.com.ar/2015/01/efemerides-futboleras-del-mes-de-enero.html',1:'https://www.efemeridesfutboleras.com.ar/2015/01/efemerides-futboleras-de-febrero.html',2:'https://www.efemeridesfutboleras.com.ar/2015/02/efemerides-futboleras-del-mes-de-marzo.html',3:'https://www.efemeridesfutboleras.com.ar/2015/04/efemerides-futboleras-de-abril.html',4:'https://www.efemeridesfutboleras.com.ar/2015/05/efemerides-futboleras-del-mes-de-mayo.html',5:'https://www.efemeridesfutboleras.com.ar/2014/06/efemerides-futboleras-del-mes-de-junio.html',6:'https://www.efemeridesfutboleras.com.ar/2014/07/efemerides-futboleras-del-mes-de-julio.html',7:'https://www.efemeridesfutboleras.com.ar/2014/08/efemerides-futboleras-del-mes-de-agosto.html',8:'https://www.efemeridesfutboleras.com.ar/2014/09/hace-click-y-repasa-las-efemerides-del.html',9:'https://www.efemeridesfutboleras.com.ar/2014/10/efemerides-futboleras-de-octubre.html',10:'https://www.efemeridesfutboleras.com.ar/2014/11/efemerides-futboleras-de-noviembre.html',11:'https://www.efemeridesfutboleras.com.ar/2014/12/hace-click-y-repasa-las-efemerides-del.html'};
+const MESES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+let myEvents=JSON.parse(localStorage.getItem('laugh-events')||'[]');
+let myCampanias=JSON.parse(localStorage.getItem('laugh-campanias')||'[]');
+let calMonth=new Date().getMonth(),calYear=new Date().getFullYear();
+let currentCampanaIdx=-1;
+let currentCampana={nombre:'',brief:{},guion:{},presupuesto:[],propuesta:{}};
 
-const EFEM_URLS = {
-  0: 'https://www.efemeridesfutboleras.com.ar/2015/01/efemerides-futboleras-del-mes-de-enero.html',
-  1: 'https://www.efemeridesfutboleras.com.ar/2015/01/efemerides-futboleras-de-febrero.html',
-  2: 'https://www.efemeridesfutboleras.com.ar/2015/02/efemerides-futboleras-del-mes-de-marzo.html',
-  3: 'https://www.efemeridesfutboleras.com.ar/2015/04/efemerides-futboleras-de-abril.html',
-  4: 'https://www.efemeridesfutboleras.com.ar/2015/05/efemerides-futboleras-del-mes-de-mayo.html',
-  5: 'https://www.efemeridesfutboleras.com.ar/2014/06/efemerides-futboleras-del-mes-de-junio.html',
-  6: 'https://www.efemeridesfutboleras.com.ar/2014/07/efemerides-futboleras-del-mes-de-julio.html',
-  7: 'https://www.efemeridesfutboleras.com.ar/2014/08/efemerides-futboleras-del-mes-de-agosto.html',
-  8: 'https://www.efemeridesfutboleras.com.ar/2014/09/hace-click-y-repasa-las-efemerides-del.html',
-  9: 'https://www.efemeridesfutboleras.com.ar/2014/10/efemerides-futboleras-de-octubre.html',
-  10: 'https://www.efemeridesfutboleras.com.ar/2014/11/efemerides-futboleras-de-noviembre.html',
-  11: 'https://www.efemeridesfutboleras.com.ar/2014/12/hace-click-y-repasa-las-efemerides-del.html',
-};
+function showPage(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));document.getElementById(id).classList.add('active');if(btn)btn.classList.add('active');}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+function setFechaHoy(){const now=new Date();document.getElementById('fecha-hoy').textContent=now.toLocaleDateString('es-AR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});}
 
-const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-
-// ===== STATE =====
-let myEvents = JSON.parse(localStorage.getItem('laugh-events') || '[]');
-let calMonth = new Date().getMonth(), calYear = new Date().getFullYear();
-
-// ===== NAV =====
-function showPage(id, btn) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  btn.classList.add('active');
+function initEfemerides(){
+  const now=new Date();const mes=now.getMonth();
+  const link=document.getElementById('efem-mes-link');const titulo=document.getElementById('efem-mes-titulo');
+  if(link&&EFEM_URLS[mes]){link.href=EFEM_URLS[mes];titulo.textContent='Ver todas las efemérides de '+MESES[mes]+' en Efemérides Futboleras ↗';}
+  const key=String(now.getDate()).padStart(2,'0')+'/'+String(now.getMonth()+1).padStart(2,'0');
+  const hoy=EFEMERIDES.filter(e=>e.fecha===key);
+  const mT=document.getElementById('m-efem-titulo');const mA=document.getElementById('m-efem-año');
+  if(hoy.length>0){mT.textContent=hoy[0].titulo;mA.textContent=hoy[0].fecha+' · '+hoy[0].año+' · '+hoy[0].club;}
+  else{mT.textContent='Sin efeméride hoy';mA.textContent='Consultá el historial';}
+  const semana=[];
+  for(let i=-2;i<=4;i++){const d=new Date(now);d.setDate(d.getDate()+i);const k=String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0');EFEMERIDES.filter(e=>e.fecha===k).forEach(e=>semana.push({...e,diff:i}));}
+  const el=document.getElementById('efemerides-semana');
+  if(el){el.innerHTML=semana.length===0?'<div style="font-size:13px;color:var(--text3)">Sin efemérides esta semana</div>':semana.map(e=>'<a href="'+e.link+'" target="_blank" class="historic-item"><div class="historic-year">'+e.fecha+' · '+e.año+' · '+(e.diff===0?'HOY':e.diff<0?'hace '+Math.abs(e.diff)+' días':'en '+e.diff+' días')+'</div><div class="historic-title">'+e.titulo+'</div><div class="historic-club">'+e.club+'</div></a>').join('');}
+  const tl=document.getElementById('timeline-historicos');
+  if(tl){tl.innerHTML=[...EFEMERIDES].sort((a,b)=>a.año-b.año).map(e=>'<a href="'+e.link+'" target="_blank" class="historic-item"><div class="historic-year">'+e.año+' · '+e.fecha+'</div><div class="historic-title">'+e.titulo+'</div><div class="historic-club">'+e.club+'</div></a>').join('');}
 }
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+function buscarEfemeride(){
+  const val=document.getElementById('hist-fecha').value;if(!val)return;
+  const d=new Date(val+'T12:00:00');
+  const key=String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0');
+  const found=EFEMERIDES.filter(e=>e.fecha===key);
+  const el=document.getElementById('hist-result');const mesUrl=EFEM_URLS[d.getMonth()];
+  if(found.length===0){el.innerHTML='<div style="color:var(--text3);margin-bottom:10px">Sin efemérides para '+key+'</div>'+(mesUrl?'<a href="'+mesUrl+'" target="_blank" class="btn btn-ghost" style="text-decoration:none;font-size:12px">Ver todo '+MESES[d.getMonth()]+' en Efemérides Futboleras ↗</a>':'');}
+  else{el.innerHTML=found.map(e=>'<a href="'+e.link+'" target="_blank" class="historic-item"><div class="historic-year">'+e.año+'</div><div class="historic-title">'+e.titulo+'</div><div class="historic-club">'+e.club+'</div></a>').join('');}
 }
 
-// ===== FECHA HOY =====
-function setFechaHoy() {
-  const now = new Date();
-  document.getElementById('fecha-hoy').textContent = now.toLocaleDateString('es-AR', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
-}
-
-// ===== EFEMÉRIDES =====
-function getEfemHoy() {
-  const now = new Date();
-  const key = `${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}`;
-  return EFEMERIDES.filter(e => e.fecha === key);
-}
-
-function getEfemSemana() {
-  const now = new Date();
-  const result = [];
-  for (let i = -2; i <= 4; i++) {
-    const d = new Date(now); d.setDate(d.getDate() + i);
-    const key = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
-    EFEMERIDES.filter(e => e.fecha === key).forEach(e => result.push({...e, diff: i}));
+function renderCalendar(){
+  const now=new Date();
+  const firstDay=new Date(calYear,calMonth,1).getDay();
+  const offset=firstDay===0?6:firstDay-1;
+  const total=new Date(calYear,calMonth+1,0).getDate();
+  const evDays={};myEvents.filter(e=>{const d=new Date(e.fecha+'T12:00:00');return d.getMonth()===calMonth&&d.getFullYear()===calYear;}).forEach(e=>{const d=new Date(e.fecha+'T12:00:00').getDate();if(!evDays[d])evDays[d]=[];evDays[d].push(e.nombre);});
+  const histDays={};EFEMERIDES.filter(e=>{const[,mm]=e.fecha.split('/');return parseInt(mm)-1===calMonth;}).forEach(e=>{const d=parseInt(e.fecha.split('/')[0]);if(!histDays[d])histDays[d]=[];histDays[d].push(e.titulo);});
+  const partidoDays={};PARTIDOS_2025.filter(p=>{const d=new Date(p.fecha);return d.getMonth()===calMonth&&d.getFullYear()===calYear;}).forEach(p=>{const d=new Date(p.fecha).getDate();if(!partidoDays[d])partidoDays[d]=[];partidoDays[d].push(p.local+' vs '+p.visitante+(p.resultado&&p.resultado!='?'?' ('+p.resultado+')':'')+(p.torneo?' · '+p.torneo:''));});
+  const days=['Lu','Ma','Mi','Ju','Vi','Sa','Do'];
+  const el=document.getElementById('cal-container');if(!el)return;
+  let html='<div class="cal-nav"><div class="cal-month">'+MESES[calMonth]+' '+calYear+'</div><div style="display:flex;gap:5px"><button class="cal-btn" onclick="prevMonth()">‹</button><button class="cal-btn" onclick="nextMonth()">›</button></div></div>';
+  html+='<div class="cal-grid">'+days.map(d=>'<div class="cal-head">'+d+'</div>').join('')+Array(offset).fill('<div class="cal-cell empty"></div>').join('');
+  for(let d=1;d<=total;d++){
+    const isToday=d===now.getDate()&&calMonth===now.getMonth()&&calYear===now.getFullYear();
+    const hasEv=evDays[d];const hasHist=histDays[d];const hasPartido=partidoDays[d];
+    const dots=(hasEv||hasHist||hasPartido)?'<div class="cal-dots">'+(hasEv?'<div class="cal-dot ev"></div>':'')+(hasPartido?'<div class="cal-dot partido"></div>':'')+(hasHist?'<div class="cal-dot hist"></div>':'')+'</div>':'';
+    html+='<div class="cal-cell '+(isToday?'today':'')+(hasEv?' has-event':'')+(hasPartido?' has-partido':'')+'" title="'+(hasPartido?hasPartido.join(', '):'')+'">'+d+dots+'</div>';
   }
-  return result;
+  html+='</div>';el.innerHTML=html;
+  const pp=document.getElementById('partidos-proximos');
+  if(pp){const now2=new Date();const prox=PARTIDOS_2025.filter(p=>new Date(p.fecha)>=now2).slice(0,4);pp.innerHTML=prox.length===0?'<div style="font-size:13px;color:var(--text3)">No hay partidos próximos cargados</div>':prox.map(p=>'<div class="partido-item"><div class="partido-fecha">'+new Date(p.fecha+'T12:00:00').toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit',year:'numeric'})+'</div><div class="partido-titulo">'+p.local+' vs '+p.visitante+'</div></div>').join('');}
+}
+function prevMonth(){calMonth===0?(calMonth=11,calYear--):calMonth--;renderCalendar();}
+function nextMonth(){calMonth===11?(calMonth=0,calYear++):calMonth++;renderCalendar();}
+function addEvent(){
+  const nombre=document.getElementById('ev-nombre').value.trim();const fecha=document.getElementById('ev-fecha').value;
+  const tipo=document.getElementById('ev-tipo').value;const notas=document.getElementById('ev-notas').value.trim();
+  if(!nombre||!fecha){showToast('Completá nombre y fecha');return;}
+  myEvents.push({nombre,fecha,tipo,notas});localStorage.setItem('laugh-events',JSON.stringify(myEvents));
+  renderCalendar();renderEventList();
+  document.getElementById('ev-nombre').value='';document.getElementById('ev-fecha').value='';document.getElementById('ev-notas').value='';
+  showToast('Evento guardado!');
+}
+function renderEventList(){
+  const el=document.getElementById('ev-list');if(!el)return;
+  if(myEvents.length===0){el.innerHTML='<div style="font-size:13px;color:var(--text3)">Sin eventos cargados</div>';return;}
+  el.innerHTML=myEvents.slice().reverse().slice(0,5).map(e=>'<div style="padding:9px 0;border-bottom:1px solid var(--border);display:flex;gap:9px;align-items:flex-start"><div style="width:7px;height:7px;border-radius:50%;background:var(--accent);margin-top:5px;flex-shrink:0"></div><div><div style="font-size:13px;font-weight:500">'+e.nombre+'</div><div style="font-size:11px;color:var(--text3);font-family:DM Mono,monospace">'+e.tipo+' · '+e.fecha+'</div></div></div>').join('');
 }
 
-function initEfemerides() {
-  const now = new Date();
-  const mes = now.getMonth();
+function openNuevaCampana(){
+  currentCampana={nombre:'',brief:{},guion:{},presupuesto:[],propuesta:{}};currentCampanaIdx=-1;
+  document.getElementById('editor-titulo').textContent='Nueva campaña';
+  document.getElementById('campana-editor').style.display='block';
+  ['b-nombre','b-cliente','b-objetivo','b-publico','b-canales','b-mensaje','b-referencias','b-restricciones','g-tema','g-recursos','g-cta','g-estilo','p-titulo','p-notas'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  showPlantilla('brief',document.querySelector('.plantilla-tab'));
+  setTimeout(()=>document.getElementById('campana-editor').scrollIntoView({behavior:'smooth'}),100);
+}
+function showPlantilla(id,btn){
+  document.querySelectorAll('.plantilla-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.plantilla-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');if(btn)btn.classList.add('active');
+}
+function guardarCampana(){
+  const nombre=document.getElementById('b-nombre').value||'Campaña sin nombre';
+  currentCampana.nombre=nombre;currentCampana.brief={cliente:document.getElementById('b-cliente').value,objetivo:document.getElementById('b-objetivo').value};
+  if(currentCampanaIdx>=0)myCampanias[currentCampanaIdx]=currentCampana;else myCampanias.push({...currentCampana});
+  localStorage.setItem('laugh-campanias',JSON.stringify(myCampanias));
+  renderCampaniasList();document.getElementById('m-campanias').textContent=myCampanias.length;showToast('Campaña guardada!');
+}
+function renderCampaniasList(){
+  const el=document.getElementById('campanias-list');if(!el)return;
+  if(myCampanias.length===0){el.innerHTML='<div style="font-size:13px;color:var(--text3);padding:10px 0">Sin campañas guardadas.</div>';return;}
+  el.innerHTML=myCampanias.map((c,i)=>'<div class="campana-card" onclick="editCampana('+i+')"><div><div class="campana-nombre">'+(c.nombre||'Sin nombre')+'</div><div class="campana-meta">'+(c.brief?.cliente||'Sin cliente')+'</div></div><div style="color:var(--accent)">→</div></div>').join('');
+}
+function editCampana(idx){currentCampanaIdx=idx;currentCampana=myCampanias[idx];document.getElementById('editor-titulo').textContent=currentCampana.nombre||'Campaña';document.getElementById('campana-editor').style.display='block';document.getElementById('campana-editor').scrollIntoView({behavior:'smooth'});}
+function addPresupRow(){
+  const rows=document.getElementById('presup-rows');const div=document.createElement('div');
+  div.className='presup-row';div.style.cssText='display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:8px';
+  div.innerHTML='<input type="text" placeholder="Item" class="pi-item"/><input type="text" placeholder="Detalle" class="pi-det"/><input type="number" placeholder="0" class="pi-monto" style="width:120px" oninput="calcTotal()"/>';
+  rows.appendChild(div);
+}
+function calcTotal(){const montos=[...document.querySelectorAll('.pi-monto')].map(i=>parseFloat(i.value)||0);const total=montos.reduce((a,b)=>a+b,0);document.getElementById('presup-total').textContent='$'+total.toLocaleString('es-AR');}
 
-  // Link del mes
-  const link = document.getElementById('efem-mes-link');
-  const titulo = document.getElementById('efem-mes-titulo');
-  if (link && EFEM_URLS[mes]) {
-    link.href = EFEM_URLS[mes];
-    titulo.textContent = `Ver todas las efemérides de ${MESES[mes]} ↗`;
-  }
-
-  // Métrica inicio
-  const hoy = getEfemHoy();
-  const mTitulo = document.getElementById('m-efem-titulo');
-  const mAño = document.getElementById('m-efem-año');
-  if (hoy.length > 0) {
-    mTitulo.textContent = hoy[0].titulo;
-    mAño.textContent = `${hoy[0].fecha} · ${hoy[0].año} · ${hoy[0].club}`;
-  } else {
-    mTitulo.textContent = 'Sin efeméride hoy';
-    mAño.textContent = 'Consultá el historial completo';
-  }
-
-  // Semana
-  const semana = getEfemSemana();
-  const elSem = document.getElementById('efemerides-semana');
-  if (elSem) {
-    if (semana.length === 0) {
-      elSem.innerHTML = '<div style="font-size:13px;color:var(--text3)">Sin efemérides esta semana</div>';
-    } else {
-      elSem.innerHTML = semana.map(e => `
-        <a href="${e.link}" target="_blank" style="text-decoration:none;display:block">
-          <div class="historic-item">
-            <div class="historic-year">${e.fecha} · ${e.año} · ${e.diff===0?'HOY':e.diff<0?`hace ${Math.abs(e.diff)} días`:`en ${e.diff} días`}</div>
-            <div class="historic-title">${e.titulo}</div>
-            <div class="historic-club">${e.club}</div>
-          </div>
-        </a>
-      `).join('');
-    }
-  }
-
-  // Timeline completo
-  const tl = document.getElementById('timeline-historicos');
-  if (tl) {
-    tl.innerHTML = [...EFEMERIDES].sort((a,b)=>a.año-b.año).map(e => `
-      <a href="${e.link}" target="_blank" style="text-decoration:none;display:block">
-        <div class="historic-item">
-          <div class="historic-year">${e.año} · ${e.fecha}</div>
-          <div class="historic-title">${e.titulo}</div>
-          <div class="historic-club">${e.club}</div>
-        </div>
-      </a>
-    `).join('');
-  }
+async function generarBrief(){
+  const p='Generá un brief profesional para una campaña de marketing deportivo:\nNombre: '+document.getElementById('b-nombre').value+'\nCliente: '+document.getElementById('b-cliente').value+'\nObjetivo: '+document.getElementById('b-objetivo').value+'\nPúblico: '+document.getElementById('b-publico').value+'\nCanales: '+document.getElementById('b-canales').value+'\nMensaje: '+document.getElementById('b-mensaje').value+'\nReferencias: '+document.getElementById('b-referencias').value+'\nRestricciones: '+document.getElementById('b-restricciones').value+'\n\nIncluí: contexto, objetivos SMART, público detallado, propuesta de valor, canales y KPIs. Formato profesional listo para presentar.';
+  await callClaude(p,document.getElementById('brief-output'));
+}
+async function generarGuion(){
+  const p='Generá un guión detallado para un '+document.getElementById('g-formato').value+' sobre: "'+document.getElementById('g-tema').value+'". Tono: '+document.getElementById('g-tono').value+'. Recursos: '+document.getElementById('g-recursos').value+'. CTA: '+document.getElementById('g-cta').value+'. Estilo: '+document.getElementById('g-estilo').value+'.\n\nIncluí: estructura por segundos, descripción de escenas, texto en pantalla, indicaciones de cámara, música y CTA. Formato de producción profesional.';
+  await callClaude(p,document.getElementById('guion-output'));
+}
+async function generarPresupuesto(){
+  const items=[...document.querySelectorAll('.presup-row')].map(r=>({item:r.querySelector('.pi-item')?.value||'',det:r.querySelector('.pi-det')?.value||'',monto:r.querySelector('.pi-monto')?.value||'0'})).filter(i=>i.item);
+  const p='Analizá este presupuesto de producción para una agencia de marketing deportivo argentina:\n'+items.map(i=>'- '+i.item+': '+i.det+' — $'+parseInt(i.monto).toLocaleString()).join('\n')+'\n\nDame: 1) Si los precios son razonables para Argentina hoy, 2) Ítems que faltan, 3) Donde optimizar, 4) % de contingencia sugerida.';
+  await callClaude(p,document.getElementById('presupuesto-output'));
+}
+async function generarPropuesta(){
+  const p='Generá una propuesta comercial completa para presentarle a un cliente de marketing deportivo.\nTítulo: '+document.getElementById('p-titulo').value+'\nPresentado por: '+document.getElementById('p-presentado').value+'\nFecha: '+document.getElementById('p-fecha').value+'\nCliente: '+document.getElementById('b-cliente').value+'\nObjetivo: '+document.getElementById('b-objetivo').value+'\nMensaje: '+document.getElementById('b-mensaje').value+'\nNotas: '+document.getElementById('p-notas').value+'\n\nIncluí: carta de presentación, resumen ejecutivo, objetivos, estrategia, cronograma, equipo, condiciones y próximos pasos. Tono profesional y persuasivo, lista para enviar.';
+  await callClaude(p,document.getElementById('propuesta-output'));
+}
+async function generarPP(){
+  const p='Propuesta de preproducción para: '+document.getElementById('pp-evento').value+', Formato: '+document.getElementById('pp-formato').value+', Objetivo: '+document.getElementById('pp-objetivo').value+', Recursos: '+document.getElementById('pp-recursos').value+'. Incluí lista de tomas, estructura, timing y sugerencias de publicación.';
+  await callClaude(p,document.getElementById('pp-output'));
 }
 
-function buscarEfemeride() {
-  const val = document.getElementById('hist-fecha').value;
-  if (!val) return;
-  const d = new Date(val + 'T12:00:00');
-  const key = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
-  const found = EFEMERIDES.filter(e => e.fecha === key);
-  const el = document.getElementById('hist-result');
-  const mesUrl = EFEM_URLS[d.getMonth()];
-  if (found.length === 0) {
-    el.innerHTML = `<div style="color:var(--text3);margin-bottom:12px">Sin efemérides cargadas para ${key}</div>
-    ${mesUrl ? `<a href="${mesUrl}" target="_blank" class="btn btn-ghost" style="text-decoration:none;font-size:12px">Ver todo ${MESES[d.getMonth()]} en Efemérides Futboleras ↗</a>` : ''}`;
-  } else {
-    el.innerHTML = found.map(e => `
-      <a href="${e.link}" target="_blank" style="text-decoration:none;display:block">
-        <div class="historic-item"><div class="historic-year">${e.año}</div><div class="historic-title">${e.titulo}</div><div class="historic-club">${e.club}</div></div>
-      </a>
-    `).join('') + (mesUrl ? `<a href="${mesUrl}" target="_blank" class="btn btn-ghost" style="text-decoration:none;font-size:12px;margin-top:12px">Ver todo ${MESES[d.getMonth()]} ↗</a>` : '');
-  }
-}
+function addPieza(){const nombre=prompt('Nombre de la pieza:');if(!nombre)return;const formato=prompt('Formato:')||'N/A';const fecha=prompt('Fecha (DD/MM):')||'-';const table=document.getElementById('content-table');const n=table.rows.length+1;const tr=document.createElement('tr');tr.innerHTML='<td style="color:var(--text3);font-family:DM Mono,monospace;font-size:11px">'+String(n).padStart(2,'0')+'</td><td>'+nombre+'</td><td><span class="tag" style="background:var(--surface3);color:var(--text2)">'+formato+'</span></td><td style="font-family:DM Mono,monospace;font-size:12px">'+fecha+'</td><td><span class="pill pill-gray">Pendiente</span></td><td><button class="btn btn-ghost" style="padding:3px 8px;font-size:11px" onclick="toggleEstado(this)">Check</button></td>';table.appendChild(tr);showToast('Pieza agregada!');}
+function toggleEstado(btn){const td=btn.closest('tr').querySelector('td:nth-child(5)');td.innerHTML=td.innerHTML.includes('Listo')?'<span class="pill pill-gray">Pendiente</span>':'<span class="pill pill-green">Listo</span>';showToast('Estado actualizado');}
+function toggleTask(el){el.classList.toggle('done');el.nextElementSibling.classList.toggle('done');updateTaskSummary();}
+function updateTaskSummary(){const total=document.querySelectorAll('.task-row').length;const done=document.querySelectorAll('.task-check.done').length;const el=document.getElementById('task-summary');if(el)el.textContent=done+' de '+total+' tareas completadas';const m=document.getElementById('m-tareas');if(m)m.textContent=done+'/'+total;}
+function addTarea(){const nombre=prompt('Tarea:');if(!nombre)return;const fecha=prompt('Fecha (DD/MM):')||'-';const list=document.getElementById('tareas-list');const div=document.createElement('div');div.className='task-row';div.innerHTML='<div class="task-check" onclick="toggleTask(this)"><svg viewBox="0 0 12 12" fill="black"><path d="M2 6l3 3 5-5"/></svg></div><div class="task-name">'+nombre+'</div><div class="task-due">'+fecha+'</div>';list.appendChild(div);updateTaskSummary();showToast('Tarea agregada!');}
+function editKPIs(){[['k-ig-seg','Instagram Seguidores'],['k-ig-alc','Instagram Alcance'],['k-ig-eng','Engagement %'],['k-tt-seg','TikTok Seguidores']].forEach(([id,label])=>{const val=prompt(label+':',document.getElementById(id).textContent);if(val)document.getElementById(id).textContent=val;});showToast('KPIs actualizados!');}
+function addFactura(){const cliente=prompt('Cliente:');if(!cliente)return;const concepto=prompt('Concepto:')||'N/A';const monto=prompt('Monto (ARS):')||'0';const table=document.getElementById('fact-table');const tr=document.createElement('tr');const now=new Date();const periodo=now.toLocaleString('es',{month:'short'})+' '+now.getFullYear();tr.innerHTML='<td>'+cliente+'</td><td>'+concepto+'</td><td style="font-family:DM Mono,monospace;font-size:12px">'+periodo+'</td><td style="font-family:DM Mono,monospace">$'+parseInt(monto).toLocaleString()+'</td><td><span class="pill pill-amber">Pendiente</span></td>';table.insertBefore(tr,table.firstChild);showToast('Factura agregada!');}
+async function analizarPresupuestos(){const nombres=[...document.querySelectorAll('.prov-nombre')].map(i=>i.value||'Sin nombre');const montos=[...document.querySelectorAll('.prov-monto')].map(i=>i.value||'0');const detalles=[...document.querySelectorAll('.prov-detalle')].map(i=>i.value||'Sin detalle');const p='Analizá estos 3 presupuestos para una agencia de marketing deportivo argentina:\n1. '+nombres[0]+': $'+montos[0]+' - '+detalles[0]+'\n2. '+nombres[1]+': $'+montos[1]+' - '+detalles[1]+'\n3. '+nombres[2]+': $'+montos[2]+' - '+detalles[2]+'\n\nAnálisis comparativo y recomendación.';await callClaude(p,document.getElementById('presup-output-op'));}
 
-// ===== CALENDARIO =====
-function renderCalendar() {
-  const now = new Date();
-  const firstDay = new Date(calYear, calMonth, 1).getDay();
-  const offset = firstDay === 0 ? 6 : firstDay - 1;
-  const total = new Date(calYear, calMonth + 1, 0).getDate();
-  const evDays = myEvents.filter(e => { const d = new Date(e.fecha+'T12:00:00'); return d.getMonth()===calMonth&&d.getFullYear()===calYear; }).map(e => new Date(e.fecha+'T12:00:00').getDate());
-  const histDays = EFEMERIDES.filter(e => { const [dd,mm] = e.fecha.split('/'); return parseInt(mm)-1===calMonth; }).map(e => parseInt(e.fecha.split('/')[0]));
-  const days = ['Lu','Ma','Mi','Ju','Vi','Sá','Do'];
-  const el = document.getElementById('cal-container');
-  if (!el) return;
-  let html = `<div class="cal-nav"><div class="cal-month">${MESES[calMonth]} ${calYear}</div><div style="display:flex;gap:6px"><button class="cal-btn" onclick="prevMonth()">‹</button><button class="cal-btn" onclick="nextMonth()">›</button></div></div>`;
-  html += `<div class="cal-grid">${days.map(d=>`<div class="cal-head">${d}</div>`).join('')}${Array(offset).fill('<div class="cal-cell empty"></div>').join('')}`;
-  for (let d = 1; d <= total; d++) {
-    const isToday = d===now.getDate()&&calMonth===now.getMonth()&&calYear===now.getFullYear();
-    const hasEv = evDays.includes(d);
-    const isHist = histDays.includes(d);
-    html += `<div class="cal-cell ${isToday?'today':''} ${hasEv?'has-event':''} ${isHist&&!isToday?'historic':''}">${d}</div>`;
-  }
-  html += '</div>';
-  el.innerHTML = html;
+async function callClaude(userPrompt,outputEl){
+  outputEl.style.display='block';outputEl.innerHTML='<span class="spinner"></span>Generando con IA...';
+  try{
+    const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:"Sos un asistente especializado en marketing deportivo y fútbol argentino. Trabajás para LAUGH, una agencia argentina. El usuario es Benja, 21 años. Respondé en español rioplatense, práctico y profesional.",messages:[{role:"user",content:userPrompt}]})});
+    const data=await res.json();outputEl.textContent=data.content.map(i=>i.text||"").join("\n");
+  }catch(e){outputEl.textContent="Error al conectar. Revisá tu conexión.";}
 }
+function setIA(text){document.getElementById('ia-input').value=text;}
+async function runIA(){const input=document.getElementById('ia-input').value.trim();if(!input)return;await callClaude(input,document.getElementById('ia-output'));}
+function clearIA(){document.getElementById('ia-input').value='';const o=document.getElementById('ia-output');o.style.display='none';o.textContent='';}
+function goIA(prompt){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));document.getElementById('asistente').classList.add('active');document.querySelectorAll('.nav-item')[8].classList.add('active');setIA(prompt);runIA();}
 
-function prevMonth() { calMonth===0?(calMonth=11,calYear--):calMonth--; renderCalendar(); }
-function nextMonth() { calMonth===11?(calMonth=0,calYear++):calMonth++; renderCalendar(); }
-
-function addEvent() {
-  const nombre = document.getElementById('ev-nombre').value.trim();
-  const fecha = document.getElementById('ev-fecha').value;
-  const tipo = document.getElementById('ev-tipo').value;
-  const notas = document.getElementById('ev-notas').value.trim();
-  if (!nombre || !fecha) { showToast('Completá nombre y fecha'); return; }
-  myEvents.push({ nombre, fecha, tipo, notas });
-  localStorage.setItem('laugh-events', JSON.stringify(myEvents));
-  renderCalendar(); renderEventList();
-  document.getElementById('ev-nombre').value=''; document.getElementById('ev-fecha').value=''; document.getElementById('ev-notas').value='';
-  showToast('Evento guardado ✓');
-}
-
-function renderEventList() {
-  const el = document.getElementById('ev-list');
-  if (!el) return;
-  if (myEvents.length===0) { el.innerHTML='<div style="font-size:13px;color:var(--text3)">Sin eventos cargados</div>'; return; }
-  el.innerHTML = myEvents.slice().reverse().slice(0,6).map(e=>`
-    <div style="padding:10px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start">
-      <div style="width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:5px;flex-shrink:0"></div>
-      <div><div style="font-size:13px;font-weight:500">${e.nombre}</div><div style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace">${e.tipo} · ${e.fecha}</div></div>
-    </div>
-  `).join('');
-}
-
-// ===== CONTENIDO =====
-function addPieza() {
-  const nombre = prompt('Nombre de la pieza:'); if (!nombre) return;
-  const formato = prompt('Formato:') || 'N/A';
-  const fecha = prompt('Fecha (DD/MM):') || '-';
-  const table = document.getElementById('content-table');
-  const n = table.rows.length + 1;
-  const tr = document.createElement('tr');
-  tr.innerHTML = `<td style="color:var(--text3);font-family:'DM Mono',monospace;font-size:11px">${String(n).padStart(2,'0')}</td><td>${nombre}</td><td><span class="tag" style="background:var(--surface3);color:var(--text2)">${formato}</span></td><td style="font-family:'DM Mono',monospace;font-size:12px">${fecha}</td><td><span class="pill pill-gray">Pendiente</span></td><td><button class="btn btn-ghost" style="padding:3px 10px;font-size:11px" onclick="toggleEstado(this)">✓</button></td>`;
-  table.appendChild(tr); showToast('Pieza agregada ✓');
-}
-
-function toggleEstado(btn) {
-  const td = btn.closest('tr').querySelector('td:nth-child(5)');
-  td.innerHTML = td.innerHTML.includes('Listo') ? '<span class="pill pill-gray">Pendiente</span>' : '<span class="pill pill-green">Listo</span>';
-  showToast('Estado actualizado');
-}
-
-// ===== PROGRESO =====
-function toggleTask(el) {
-  el.classList.toggle('done');
-  el.nextElementSibling.classList.toggle('done');
-  updateTaskSummary();
-}
-
-function updateTaskSummary() {
-  const total = document.querySelectorAll('.task-row').length;
-  const done = document.querySelectorAll('.task-check.done').length;
-  const el = document.getElementById('task-summary');
-  if (el) el.textContent = `${done} de ${total} tareas completadas esta semana`;
-  const m = document.getElementById('m-tareas');
-  if (m) m.textContent = `${done}/${total}`;
-}
-
-function addTarea() {
-  const nombre = prompt('Nombre de la tarea:'); if (!nombre) return;
-  const fecha = prompt('Fecha (DD/MM):') || '-';
-  const list = document.getElementById('tareas-list');
-  const div = document.createElement('div');
-  div.className = 'task-row';
-  div.innerHTML = `<div class="task-check" onclick="toggleTask(this)"><svg viewBox="0 0 12 12" fill="black"><path d="M2 6l3 3 5-5"/></svg></div><div class="task-name">${nombre}</div><div class="task-due">${fecha}</div>`;
-  list.appendChild(div);
-  updateTaskSummary(); showToast('Tarea agregada ✓');
-}
-
-function editKPIs() {
-  const fields = [['k-ig-seg','Instagram Seguidores'],['k-ig-alc','Instagram Alcance'],['k-ig-eng','Engagement %'],['k-tt-seg','TikTok Seguidores']];
-  fields.forEach(([id,label]) => {
-    const val = prompt(`${label}:`, document.getElementById(id).textContent);
-    if (val) document.getElementById(id).textContent = val;
-  });
-  showToast('KPIs actualizados ✓');
-}
-
-// ===== OPERACIONES =====
-function addFactura() {
-  const cliente = prompt('Cliente:'); if (!cliente) return;
-  const concepto = prompt('Concepto:') || 'N/A';
-  const monto = prompt('Monto (ARS):') || '0';
-  const table = document.getElementById('fact-table');
-  const tr = document.createElement('tr');
-  const now = new Date();
-  const periodo = `${now.toLocaleString('es',{month:'short'})} ${now.getFullYear()}`;
-  tr.innerHTML = `<td>${cliente}</td><td>${concepto}</td><td style="font-family:'DM Mono',monospace;font-size:12px">${periodo}</td><td style="font-family:'DM Mono',monospace">$${parseInt(monto).toLocaleString()}</td><td><span class="pill pill-amber">Pendiente</span></td>`;
-  table.insertBefore(tr, table.firstChild);
-  showToast('Factura agregada ✓');
-}
-
-async function analizarPresupuestos() {
-  const nombres = [...document.querySelectorAll('.prov-nombre')].map(i=>i.value||'Sin nombre');
-  const montos = [...document.querySelectorAll('.prov-monto')].map(i=>i.value||'0');
-  const detalles = [...document.querySelectorAll('.prov-detalle')].map(i=>i.value||'Sin detalle');
-  const p = `Analizá estos 3 presupuestos para una agencia de marketing deportivo argentina:\n1. ${nombres[0]}: $${montos[0]} - ${detalles[0]}\n2. ${nombres[1]}: $${montos[1]} - ${detalles[1]}\n3. ${nombres[2]}: $${montos[2]} - ${detalles[2]}\n\nHacé un análisis comparativo y recomendá cuál elegir.`;
-  await callClaude(p, document.getElementById('presup-output'));
-}
-
-async function generarPP() {
-  const evento = document.getElementById('pp-evento').value||'Partido de fútbol';
-  const formato = document.getElementById('pp-formato').value;
-  const objetivo = document.getElementById('pp-objetivo').value||'Generar contenido de calidad';
-  const recursos = document.getElementById('pp-recursos').value||'Recursos básicos';
-  const p = `Armame una propuesta de preproducción detallada: Evento: ${evento}, Formato: ${formato}, Objetivo: ${objetivo}, Recursos: ${recursos}. Incluí lista de tomas, estructura, timing y sugerencias de publicación.`;
-  await callClaude(p, document.getElementById('pp-output'));
-}
-
-// ===== IA =====
-async function callClaude(userPrompt, outputEl) {
-  outputEl.style.display='block';
-  outputEl.innerHTML='<span class="spinner"></span>Generando con IA...';
-  try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({
-        model:"claude-sonnet-4-20250514",
-        max_tokens:1000,
-        system:"Sos un asistente especializado en marketing deportivo y fútbol argentino. Trabajás para LAUGH, una agencia argentina de marketing deportivo. El usuario se llama Benja, tiene 21 años y acaba de empezar. Sus tareas incluyen: investigación del calendario deportivo de la Liga Profesional AFA, organización de contenido, propuestas de preproducción, gestión administrativa, seguimiento de facturación y comparativa de presupuestos. Respondé siempre en español rioplatense, de manera práctica y profesional. Conocés todos los clubes de la Liga Profesional y sus historias.",
-        messages:[{role:"user",content:userPrompt}]
-      })
-    });
-    const data = await res.json();
-    outputEl.textContent = data.content.map(i=>i.text||"").join("\n");
-  } catch(e) {
-    outputEl.textContent = "Error al conectar. Revisá tu conexión.";
-  }
-}
-
-function setIA(text) { document.getElementById('ia-input').value=text; }
-async function runIA() {
-  const input = document.getElementById('ia-input').value.trim();
-  if (!input) return;
-  await callClaude(input, document.getElementById('ia-output'));
-}
-function clearIA() {
-  document.getElementById('ia-input').value='';
-  const o=document.getElementById('ia-output');
-  o.style.display='none'; o.textContent='';
-}
-function goIA(prompt) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('asistente').classList.add('active');
-  document.querySelectorAll('.nav-item')[7].classList.add('active');
-  setIA(prompt); runIA();
-}
-
-// ===== INIT =====
-setFechaHoy();
-initEfemerides();
-renderCalendar();
-renderEventList();
-updateTaskSummary();
+setFechaHoy();initEfemerides();renderCalendar();renderEventList();renderCampaniasList();updateTaskSummary();document.getElementById('m-campanias').textContent=myCampanias.length;
 </script>
 </body>
 </html>
