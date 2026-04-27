@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LAUGH · Panel Deportivo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --bg:#0a0a0a;
+      --surface:#111111;
+      --surface2:#1a1a1a;
+      --surface3:#222222;
+      --border:rgba(255,255,255,0.07);
+      --border-strong:rgba(255,255,255,0.14);
+      --text:#f0f0ee;
+      --text2:#888884;
+      --text3:#444440;
+      --accent:#e8ff47;
+      --accent-dark:#1a1f00;
+      --green:#4ade80;
+      --green-bg:rgba(74,222,128,0.1);
+      --amber:#fbbf24;
+      --amber-bg:rgba(251,191,36,0.1);
+      --red:#f87171;
+      --red-bg:rgba(248,113,113,0.1);
+      --blue:#60a5fa;
+      --blue-bg:rgba(96,165,250,0.1);
+      --radius:14px;
+      --radius-sm:8px;
+    }
+    html{scroll-behavior:smooth;}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6;overflow-x:hidden;}
+
+    /* SIDEBAR */
+    .layout{display:flex;min-height:100vh;}
+    .sidebar{width:240px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;}
+    .sidebar-brand{padding:28px 22px 22px;border-bottom:1px solid var(--border);}
+    .brand-logo{display:flex;align-items:center;gap:10px;margin-bottom:4px;}
+    .brand-mark{width:38px;height:38px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;}
+    .brand-mark svg{width:20px;height:20px;fill:black;}
+    .brand-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;letter-spacing:-0.02em;color:var(--text);}
+    .brand-sub{font-size:11px;color:var(--text2);font-family:'DM Mono',monospace;letter-spacing:0.04em;}
+    .sidebar-nav{padding:14px 10px;flex:1;overflow-y:auto;}
+    .nav-label{font-size:10px;font-weight:500;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;padding:10px 12px 4px;}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius-sm);cursor:pointer;color:var(--text2);font-size:13px;font-weight:400;transition:all 0.15s;border:none;background:none;width:100%;text-align:left;font-family:'DM Sans',sans-serif;}
+    .nav-item:hover{background:var(--surface2);color:var(--text);}
+    .nav-item.active{background:var(--accent);color:black;font-weight:500;}
+    .nav-icon{width:16px;height:16px;flex-shrink:0;opacity:0.7;}
+    .nav-item.active .nav-icon{opacity:1;}
+    .sidebar-footer{padding:18px 22px;border-top:1px solid var(--border);}
+    .user-chip{display:flex;align-items:center;gap:10px;}
+    .user-avatar{width:32px;height:32px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:black;font-family:'Syne',sans-serif;}
+    .user-name{font-size:13px;font-weight:500;}
+    .user-role{font-size:11px;color:var(--text2);}
+    .live-dot{display:inline-block;width:6px;height:6px;background:#4ade80;border-radius:50%;margin-right:6px;animation:pulse 2s infinite;}
+    @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+    /* MAIN */
+    .main{margin-left:240px;flex:1;padding:36px 40px;max-width:calc(100% - 240px);}
+    .page{display:none;animation:fadeUp 0.25s ease both;}
+    .page.active{display:block;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+    /* PAGE HEADER */
+    .page-header{margin-bottom:32px;}
+    .page-eyebrow{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;font-family:'DM Mono',monospace;margin-bottom:6px;}
+    .page-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;letter-spacing:-0.02em;}
+    .page-sub{font-size:13px;color:var(--text2);margin-top:4px;}
+
+    /* METRICS */
+    .metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;}
+    .metric-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;}
+    .metric-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;}
+    .metric-value{font-family:'Syne',sans-serif;font-size:30px;font-weight:700;letter-spacing:-0.03em;}
+    .metric-note{font-size:11px;color:var(--text3);margin-top:4px;font-family:'DM Mono',monospace;}
+    .metric-card.accent{background:var(--accent);border-color:var(--accent);}
+    .metric-card.accent .metric-label,.metric-card.accent .metric-value,.metric-card.accent .metric-note{color:black;}
+
+    /* CARDS */
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;}
+    .card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+    .card-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;letter-spacing:0.01em;}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+    .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+
+    /* PILLS */
+    .pill{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;font-family:'DM Mono',monospace;}
+    .pill-green{background:var(--green-bg);color:var(--green);}
+    .pill-amber{background:var(--amber-bg);color:var(--amber);}
+    .pill-red{background:var(--red-bg);color:var(--red);}
+    .pill-gray{background:var(--surface2);color:var(--text2);}
+    .pill-accent{background:var(--accent);color:black;}
+    .pill-blue{background:var(--blue-bg);color:var(--blue);}
+
+    /* TABLES */
+    table{width:100%;border-collapse:collapse;font-size:13px;}
+    th{text-align:left;font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;padding:0 14px 12px;font-family:'DM Mono',monospace;}
+    td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:middle;}
+    tr:hover td{background:var(--surface2);}
+
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all 0.15s;}
+    .btn-accent{background:var(--accent);color:black;}
+    .btn-accent:hover{background:#d4eb3a;}
+    .btn-ghost{background:var(--surface2);color:var(--text);border:1px solid var(--border-strong);}
+    .btn-ghost:hover{background:var(--surface3);}
+    .btn-row{display:flex;gap:10px;margin-top:16px;}
+
+    /* FORMS */
+    .form-group{margin-bottom:14px;}
+    .form-label{display:block;font-size:11px;font-weight:500;color:var(--text2);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;}
+    input[type=text],input[type=date],input[type=number],select,textarea{width:100%;padding:9px 12px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:var(--surface2);outline:none;transition:border-color 0.15s;}
+    input:focus,select:focus,textarea:focus{border-color:var(--accent);}
+    textarea{resize:vertical;min-height:90px;line-height:1.5;}
+    select option{background:var(--surface2);}
+
+    /* PROGRESS BARS */
+    .progress-bar{height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;margin-top:8px;}
+    .progress-fill{height:100%;border-radius:3px;background:var(--accent);transition:width 0.6s ease;}
+    .progress-fill.green{background:var(--green);}
+    .progress-fill.amber{background:var(--amber);}
+    .progress-fill.blue{background:var(--blue);}
+
+    /* CALENDAR */
+    .cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+    .cal-month{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;}
+    .cal-btn{background:none;border:1px solid var(--border-strong);border-radius:var(--radius-sm);width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text);font-size:16px;}
+    .cal-btn:hover{background:var(--surface2);}
+    .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+    .cal-head{font-size:10px;color:var(--text3);text-align:center;padding:6px 0;font-family:'DM Mono',monospace;text-transform:uppercase;}
+    .cal-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:12px;border-radius:8px;cursor:pointer;position:relative;color:var(--text2);}
+    .cal-cell:hover:not(.empty){background:var(--surface2);color:var(--text);}
+    .cal-cell.today{background:var(--accent);color:black;font-weight:700;font-family:'Syne',sans-serif;}
+    .cal-cell.has-event::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--accent);}
+    .cal-cell.today::after{background:black;}
+    .cal-cell.empty{cursor:default;pointer-events:none;}
+    .cal-cell.historic{color:var(--amber);}
+    .cal-cell.historic::after{background:var(--amber)!important;}
+
+    /* MATCH CARD */
+    .match-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;transition:border-color 0.15s;}
+    .match-card:hover{border-color:var(--border-strong);}
+    .match-teams{font-size:13px;font-weight:500;}
+    .match-meta{font-size:11px;color:var(--text2);margin-top:2px;font-family:'DM Mono',monospace;}
+    .match-score{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--accent);}
+    .match-time{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;}
+
+    /* HISTORIC CARD */
+    .historic-item{border-left:2px solid var(--amber);padding:10px 14px;margin-bottom:8px;background:rgba(251,191,36,0.04);border-radius:0 var(--radius-sm) var(--radius-sm) 0;}
+    .historic-year{font-family:'DM Mono',monospace;font-size:11px;color:var(--amber);margin-bottom:2px;}
+    .historic-title{font-size:13px;font-weight:500;}
+    .historic-club{font-size:11px;color:var(--text2);}
+
+    /* KPI CARDS */
+    .kpi-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;}
+    .kpi-platform{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;font-family:'DM Mono',monospace;margin-bottom:6px;}
+    .kpi-value{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:2px;}
+    .kpi-change{font-size:11px;font-family:'DM Mono',monospace;}
+    .kpi-change.up{color:var(--green);}
+    .kpi-change.down{color:var(--red);}
+
+    /* TASK ROW */
+    .task-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);}
+    .task-row:last-child{border-bottom:none;}
+    .task-check{width:18px;height:18px;border-radius:4px;border:1px solid var(--border-strong);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;}
+    .task-check.done{background:var(--accent);border-color:var(--accent);}
+    .task-check.done svg{display:block;}
+    .task-check svg{display:none;width:10px;height:10px;}
+    .task-name{flex:1;font-size:13px;}
+    .task-name.done{text-decoration:line-through;color:var(--text3);}
+    .task-due{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;}
+
+    /* IA */
+    .ia-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
+    .ia-chip{padding:6px 14px;border-radius:20px;font-size:12px;border:1px solid var(--border-strong);cursor:pointer;background:var(--surface2);color:var(--text2);transition:all 0.15s;font-family:'DM Sans',sans-serif;}
+    .ia-chip:hover{background:var(--accent);color:black;border-color:var(--accent);}
+    .ia-output{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px;font-size:13px;line-height:1.75;white-space:pre-wrap;min-height:120px;color:var(--text);margin-top:16px;}
+    .spinner{display:inline-block;width:14px;height:14px;border:2px solid var(--border-strong);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:8px;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+
+    /* TOAST */
+    .toast{position:fixed;bottom:24px;right:24px;background:var(--accent);color:black;padding:12px 20px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;opacity:0;transform:translateY(8px);transition:all 0.3s;z-index:999;pointer-events:none;font-family:'Syne',sans-serif;}
+    .toast.show{opacity:1;transform:translateY(0);}
+
+    /* SECTION DIVIDER */
+    .divider{height:1px;background:var(--border);margin:22px 0;}
+
+    /* STATUS TAG */
+    .tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.05em;}
+
+    /* CLUB BADGE */
+    .club-badge{width:36px;height:36px;border-radius:8px;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:'Syne',sans-serif;flex-shrink:0;}
+
+    /* LOADING SKELETON */
+    .skeleton{background:linear-gradient(90deg,var(--surface2) 25%,var(--surface3) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:6px;height:16px;}
+    @keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar{width:6px;}
+    ::-webkit-scrollbar-track{background:transparent;}
+    ::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:3px;}
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-logo">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14V8l6 4-6 4z"/></svg>
+      </div>
+      <div class="brand-name">LAUGH</div>
+    </div>
+    <div class="brand-sub"><span class="live-dot"></span>en vivo</div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-label">Principal</div>
+    <button class="nav-item active" onclick="showPage('inicio',this)">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      Inicio
+    </button>
+    <button class="nav-item" onclick="showPage('fixtures',this)">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14V8l6 4-6 4z"/></svg>
+      Fixtures en vivo
+    </button>
+    <button class="nav-item" onclick="showPage('historicos',this)">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+      Hitos históricos
+    </button>
+    <button class="nav-item" onclick="showPage('calendario',this)">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5C3.89 3 3 3.9 3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+      Calendario
+    </button>
+
+    <div class="nav-label">Agencia</div>
+    <button class="nav-item" onclick="showPage('contenido',this)">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg>
+      Contenido
+    </button>
+    <button class="nav-item" onclick="showPage('progreso',this)">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+      Progreso & KPIs
+    </button>
+    <button class="nav-item" onclick="showPage('operaciones',this)">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+      Operaciones
+    </button>
+
+    <div class="nav-label">IA</div>
+    <button class="nav-item" onclick="showPage('asistente',this)">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+      Asistente IA
+    </button>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="user-avatar">B</div>
+      <div>
+        <div class="user-name">Benja</div>
+        <div class="user-role">LAUGH · Marketing deportivo</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- ===== INICIO ===== -->
+<div id="inicio" class="page active">
+  <div class="page-header">
+    <div class="page-eyebrow">Panel principal</div>
+    <div class="page-title">Buen día, Benja 👋</div>
+    <div class="page-sub" id="fecha-hoy"></div>
+  </div>
+
+  <div class="metrics-row">
+    <div class="metric-card accent">
+      <div class="metric-label">Partidos hoy</div>
+      <div class="metric-value" id="m-partidos">—</div>
+      <div class="metric-note">Liga Profesional AFA</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Contenidos esta semana</div>
+      <div class="metric-value" id="m-contenidos">8</div>
+      <div class="metric-note">3 pendientes</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Tareas completadas</div>
+      <div class="metric-value" id="m-tareas">—</div>
+      <div class="metric-note">esta semana</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Facturas pendientes</div>
+      <div class="metric-value">$180k</div>
+      <div class="metric-note">2 sin cobrar</div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Partidos en vivo / próximos</div>
+        <span class="pill pill-green"><span class="live-dot" style="margin-right:4px"></span>live</span>
+      </div>
+      <div id="inicio-matches"><div class="skeleton" style="height:60px;margin-bottom:8px"></div><div class="skeleton" style="height:60px;margin-bottom:8px"></div><div class="skeleton" style="height:60px"></div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-title">Acciones rápidas con IA</div></div>
+      <div class="qa-list">
+        <div class="match-card" style="cursor:pointer" onclick="goIA('Armame un calendario editorial de fútbol para los próximos 30 días con la Liga Profesional Argentina. Incluí fechas de partidos, fechas clave y sugerencias de contenido para cada momento.')">
+          <div><div class="match-teams">Calendario editorial</div><div class="match-meta">Generá el plan del mes completo</div></div>
+          <div style="color:var(--accent);font-size:18px">↗</div>
+        </div>
+        <div class="match-card" style="cursor:pointer" onclick="goIA('Armame una propuesta de preproducción completa para la cobertura de un partido de la Liga Profesional Argentina. Incluí lista de tomas, guion, timing, recursos y distribución en redes.')">
+          <div><div class="match-teams">Brief de cobertura</div><div class="match-meta">Para el próximo partido</div></div>
+          <div style="color:var(--accent);font-size:18px">↗</div>
+        </div>
+        <div class="match-card" style="cursor:pointer" onclick="goIA('Dame un análisis de los hitos históricos más importantes de los clubes de la Liga Profesional Argentina en mayo. Incluí campeonatos, récords y efemérides relevantes para generar contenido.')">
+          <div><div class="match-teams">Efemérides del mes</div><div class="match-meta">Hitos históricos AFA para contenido</div></div>
+          <div style="color:var(--accent);font-size:18px">↗</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title">Hito histórico del día</div><span class="pill pill-amber">AFA</span></div>
+    <div id="hito-hoy" style="font-size:13px;color:var(--text2);line-height:1.7">Cargando hito histórico...</div>
+  </div>
+</div>
+
+<!-- ===== FIXTURES EN VIVO ===== -->
+<div id="fixtures" class="page">
+  <div class="page-header">
+    <div class="page-eyebrow">Liga Profesional AFA</div>
+    <div class="page-title">Fixtures en vivo</div>
+    <div class="page-sub">Resultados y próximos partidos · <span class="live-dot"></span> actualización automática</div>
+  </div>
+
+  <div class="grid2" style="margin-bottom:16px">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">En juego / Hoy</div>
+        <button class="btn btn-ghost" style="padding:6px 12px;font-size:12px" onclick="loadFixtures()">↻ Actualizar</button>
+      </div>
+      <div id="fixtures-live"><div class="skeleton" style="height:60px;margin-bottom:8px"></div><div class="skeleton" style="height:60px;margin-bottom:8px"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Próxima fecha</div></div>
+      <div id="fixtures-next"><div class="skeleton" style="height:60px;margin-bottom:8px"></div><div class="skeleton" style="height:60px;margin-bottom:8px"></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title">Tabla de posiciones — Liga Profesional 2025</div></div>
+    <table>
+      <thead><tr><th>#</th><th>Club</th><th>PJ</th><th>PTS</th><th>DIF</th><th>Estado</th></tr></thead>
+      <tbody id="tabla-posiciones"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== HISTÓRICOS ===== -->
+<div id="historicos" class="page">
+  <div class="page-header">
+    <div class="page-eyebrow">AFA · Liga Profesional</div>
+    <div class="page-title">Hitos históricos</div>
+    <div class="page-sub">Efemérides y días históricos de los clubes argentinos</div>
+  </div>
+
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px" id="club-filters">
+    <button class="ia-chip active-chip" onclick="filterHistoric('todos',this)">Todos</button>
+  </div>
+
+  <div class="grid2">
+    <div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header"><div class="card-title">Efemérides de esta semana</div><span class="pill pill-amber">historico</span></div>
+        <div id="efemerides-semana"></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Buscar por fecha</div></div>
+        <div class="form-group">
+          <label class="form-label">Fecha</label>
+          <input type="date" id="hist-fecha" onchange="buscarEfemeride()"/>
+        </div>
+        <div id="hist-result" style="margin-top:12px;font-size:13px;color:var(--text2)"></div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Línea de tiempo — Grandes hitos AFA</div></div>
+        <div id="timeline-historicos" style="max-height:500px;overflow-y:auto"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CALENDARIO ===== -->
+<div id="calendario" class="page">
+  <div class="page-header">
+    <div class="page-eyebrow">Gestión</div>
+    <div class="page-title">Calendario</div>
+    <div class="page-sub">Partidos, contenidos y fechas clave</div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div id="cal-container"></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Agregar evento</div></div>
+      <div class="form-group"><label class="form-label">Evento</label><input type="text" id="ev-nombre" placeholder="Ej: River vs Boca"/></div>
+      <div class="form-group"><label class="form-label">Fecha</label><input type="date" id="ev-fecha"/></div>
+      <div class="form-group"><label class="form-label">Tipo</label>
+        <select id="ev-tipo"><option>Partido</option><option>Contenido</option><option>Entrega</option><option>Reunión</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Notas</label><textarea id="ev-notas" placeholder="Detalles..."></textarea></div>
+      <div class="btn-row"><button class="btn btn-accent" onclick="addEvent()">Guardar evento</button></div>
+      <div class="divider"></div>
+      <div class="card-title" style="margin-bottom:14px">Próximos eventos</div>
+      <div id="ev-list"><div style="font-size:13px;color:var(--text3)">Sin eventos cargados</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CONTENIDO ===== -->
+<div id="contenido" class="page">
+  <div class="page-header">
+    <div class="page-eyebrow">Agencia</div>
+    <div class="page-title">Pipeline de contenido</div>
+    <div class="page-sub">Gestión de piezas, estados y preproducción</div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-header">
+      <div class="card-title">Piezas activas</div>
+      <button class="btn btn-ghost" style="padding:6px 12px;font-size:12px" onclick="addPieza()">+ Agregar</button>
+    </div>
+    <table>
+      <thead><tr><th>#</th><th>Pieza</th><th>Formato</th><th>Vencimiento</th><th>Estado</th><th></th></tr></thead>
+      <tbody id="content-table">
+        <tr><td style="color:var(--text3);font-family:'DM Mono',monospace;font-size:11px">01</td><td>Reel previa Superclásico</td><td><span class="tag" style="background:var(--blue-bg);color:var(--blue)">Reel IG</span></td><td style="font-family:'DM Mono',monospace;font-size:12px">27/04</td><td><span class="pill pill-amber">Revisión</span></td><td><button class="btn btn-ghost" style="padding:3px 10px;font-size:11px" onclick="toggleEstado(this)">✓</button></td></tr>
+        <tr><td style="color:var(--text3);font-family:'DM Mono',monospace;font-size:11px">02</td><td>Story previa fecha 12</td><td><span class="tag" style="background:var(--surface3);color:var(--text2)">Story</span></td><td style="font-family:'DM Mono',monospace;font-size:12px">28/04</td><td><span class="pill pill-gray">Pendiente</span></td><td><button class="btn btn-ghost" style="padding:3px 10px;font-size:11px" onclick="toggleEstado(this)">✓</button></td></tr>
+        <tr><td style="color:var(--text3);font-family:'DM Mono',monospace;font-size:11px">03</td><td>Carrusel estadísticas</td><td><span class="tag" style="background:var(--surface3);color:var(--text2)">Carrusel</span></td><td style="font-family:'DM Mono',monospace;font-size:12px">29/04</td><td><span class="pill pill-gray">Pendiente</span></td><td><button class="btn btn-ghost" style="padding:3px 10px;font-size:11px" onclick="toggleEstado(this)">✓</button></td></tr>
+        <tr><td style="color:var(--text3);font-family:'DM Mono',monospace;font-size:11px">04</td><td>Video resumen fecha</td><td><span class="tag" style="background:var(--red-bg);color:var(--red)">YouTube</span></td><td style="font-family:'DM Mono',monospace;font-size:12px">02/05</td><td><span class="pill pill-green">Listo</span></td><td><button class="btn btn-ghost" style="padding:3px 10px;font-size:11px" onclick="toggleEstado(this)">✓</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title">Generador de propuesta de preproducción</div></div>
+    <div class="grid2">
+      <div>
+        <div class="form-group"><label class="form-label">Evento</label><input type="text" id="pp-evento" placeholder="Ej: Superclásico River vs Boca"/></div>
+        <div class="form-group"><label class="form-label">Formato</label>
+          <select id="pp-formato"><option>Reel Instagram</option><option>Story</option><option>Carrusel</option><option>Video YouTube</option><option>Cobertura en vivo</option><option>TikTok</option></select>
+        </div>
+      </div>
+      <div>
+        <div class="form-group"><label class="form-label">Objetivo</label><input type="text" id="pp-objetivo" placeholder="Ej: Generar expectativa previa"/></div>
+        <div class="form-group"><label class="form-label">Recursos</label><input type="text" id="pp-recursos" placeholder="Ej: Cámara, drone, 2 personas"/></div>
+      </div>
+    </div>
+    <div class="btn-row"><button class="btn btn-accent" onclick="generarPP()">Generar propuesta con IA ↗</button></div>
+    <div id="pp-output" style="display:none" class="ia-output"></div>
+  </div>
+</div>
+
+<!-- ===== PROGRESO & KPIs ===== -->
+<div id="progreso" class="page">
+  <div class="page-header">
+    <div class="page-eyebrow">Performance</div>
+    <div class="page-title">Progreso & KPIs</div>
+    <div class="page-sub">Redes sociales · Tareas del equipo</div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-header"><div class="card-title">KPIs de redes sociales</div><button class="btn btn-ghost" style="padding:6px 12px;font-size:12px" onclick="editKPIs()">Editar datos</button></div>
+    <div class="grid4" id="kpi-grid">
+      <div class="kpi-card"><div class="kpi-platform">Instagram</div><div class="kpi-value" id="k-ig-seg">12.4k</div><div class="kpi-change up" id="k-ig-seg-c">↑ +340 esta semana</div></div>
+      <div class="kpi-card"><div class="kpi-platform">Instagram · Alcance</div><div class="kpi-value" id="k-ig-alc">48.2k</div><div class="kpi-change up" id="k-ig-alc-c">↑ +12% vs semana ant.</div></div>
+      <div class="kpi-card"><div class="kpi-platform">Instagram · Engagement</div><div class="kpi-value" id="k-ig-eng">4.8%</div><div class="kpi-change up" id="k-ig-eng-c">↑ +0.3pts</div></div>
+      <div class="kpi-card"><div class="kpi-platform">TikTok</div><div class="kpi-value" id="k-tt-seg">3.1k</div><div class="kpi-change up" id="k-tt-seg-c">↑ +220 esta semana</div></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Objetivos del mes</div></div>
+      <div id="objetivos-list">
+        <div style="margin-bottom:16px">
+          <div style="display:flex;justify-content:space-between;font-size:13px"><span>Seguidores Instagram</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text2)">12.4k / 15k</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:83%"></div></div>
+        </div>
+        <div style="margin-bottom:16px">
+          <div style="display:flex;justify-content:space-between;font-size:13px"><span>Piezas publicadas</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text2)">18 / 25</span></div>
+          <div class="progress-bar"><div class="progress-fill green" style="width:72%"></div></div>
+        </div>
+        <div style="margin-bottom:16px">
+          <div style="display:flex;justify-content:space-between;font-size:13px"><span>Engagement promedio</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text2)">4.8% / 5%</span></div>
+          <div class="progress-bar"><div class="progress-fill blue" style="width:96%"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:13px"><span>Coberturas en vivo</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text2)">2 / 4</span></div>
+          <div class="progress-bar"><div class="progress-fill amber" style="width:50%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Tareas del equipo</div>
+        <button class="btn btn-ghost" style="padding:6px 12px;font-size:12px" onclick="addTarea()">+ Tarea</button>
+      </div>
+      <div id="tareas-list">
+        <div class="task-row"><div class="task-check done" onclick="toggleTask(this)"><svg viewBox="0 0 12 12" fill="black"><path d="M2 6l3 3 5-5"/></svg></div><div class="task-name done">Armar propuesta Superclásico</div><div class="task-due">26/04</div></div>
+        <div class="task-row"><div class="task-check" onclick="toggleTask(this)"><svg viewBox="0 0 12 12" fill="black"><path d="M2 6l3 3 5-5"/></svg></div><div class="task-name">Subir reel previa</div><div class="task-due">27/04</div></div>
+        <div class="task-row"><div class="task-check" onclick="toggleTask(this)"><svg viewBox="0 0 12 12" fill="black"><path d="M2 6l3 3 5-5"/></svg></div><div class="task-name">Contactar proveedor audio</div><div class="task-due">28/04</div></div>
+        <div class="task-row"><div class="task-check" onclick="toggleTask(this)"><svg viewBox="0 0 12 12" fill="black"><path d="M2 6l3 3 5-5"/></svg></div><div class="task-name">Informe mensual cliente A</div><div class="task-due">30/04</div></div>
+        <div class="task-row"><div class="task-check" onclick="toggleTask(this)"><svg viewBox="0 0 12 12" fill="black"><path d="M2 6l3 3 5-5"/></svg></div><div class="task-name">Cargar estadísticas semana</div><div class="task-due">29/04</div></div>
+      </div>
+      <div style="margin-top:14px;font-size:12px;color:var(--text3);font-family:'DM Mono',monospace" id="task-summary"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== OPERACIONES ===== -->
+<div id="operaciones" class="page">
+  <div class="page-header">
+    <div class="page-eyebrow">Administración</div>
+    <div class="page-title">Operaciones</div>
+    <div class="page-sub">Facturación y comparativa de presupuestos</div>
+  </div>
+  <div class="metrics-row" style="grid-template-columns:repeat(3,1fr)">
+    <div class="metric-card"><div class="metric-label">Facturado (Abril)</div><div class="metric-value">$340k</div><div class="metric-note">ARS</div></div>
+    <div class="metric-card accent"><div class="metric-label">Cobrado</div><div class="metric-value">$160k</div><div class="metric-note">2 facturas</div></div>
+    <div class="metric-card"><div class="metric-label">Pendiente</div><div class="metric-value">$180k</div><div class="metric-note">2 facturas</div></div>
+  </div>
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-header"><div class="card-title">Facturas</div><button class="btn btn-ghost" style="padding:6px 12px;font-size:12px" onclick="addFactura()">+ Nueva</button></div>
+    <table>
+      <thead><tr><th>Cliente</th><th>Concepto</th><th>Período</th><th>Monto</th><th>Estado</th></tr></thead>
+      <tbody id="fact-table">
+        <tr><td>Cliente A</td><td>Community management</td><td style="font-family:'DM Mono',monospace;font-size:12px">Abr 2025</td><td style="font-family:'DM Mono',monospace">$80.000</td><td><span class="pill pill-green">Pagado</span></td></tr>
+        <tr><td>Cliente B</td><td>Producción audiovisual</td><td style="font-family:'DM Mono',monospace;font-size:12px">Abr 2025</td><td style="font-family:'DM Mono',monospace">$120.000</td><td><span class="pill pill-amber">Pendiente</span></td></tr>
+        <tr><td>Cliente C</td><td>Community management</td><td style="font-family:'DM Mono',monospace;font-size:12px">Mar 2025</td><td style="font-family:'DM Mono',monospace">$60.000</td><td><span class="pill pill-amber">Pendiente</span></td></tr>
+        <tr><td>Cliente A</td><td>Community management</td><td style="font-family:'DM Mono',monospace;font-size:12px">Mar 2025</td><td style="font-family:'DM Mono',monospace">$80.000</td><td><span class="pill pill-green">Pagado</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-title">Comparativa de presupuestos</div></div>
+    <div class="grid3" id="presup-inputs">
+      <div><div class="form-group"><label class="form-label">Proveedor 1</label><input type="text" class="prov-nombre" placeholder="Nombre"/></div><div class="form-group"><label class="form-label">Monto</label><input type="number" class="prov-monto" placeholder="45000"/></div><div class="form-group"><label class="form-label">Detalle</label><textarea class="prov-detalle" style="min-height:60px" placeholder="Qué incluye..."></textarea></div></div>
+      <div><div class="form-group"><label class="form-label">Proveedor 2</label><input type="text" class="prov-nombre" placeholder="Nombre"/></div><div class="form-group"><label class="form-label">Monto</label><input type="number" class="prov-monto" placeholder="72000"/></div><div class="form-group"><label class="form-label">Detalle</label><textarea class="prov-detalle" style="min-height:60px" placeholder="Qué incluye..."></textarea></div></div>
+      <div><div class="form-group"><label class="form-label">Proveedor 3</label><input type="text" class="prov-nombre" placeholder="Nombre"/></div><div class="form-group"><label class="form-label">Monto</label><input type="number" class="prov-monto" placeholder="98000"/></div><div class="form-group"><label class="form-label">Detalle</label><textarea class="prov-detalle" style="min-height:60px" placeholder="Qué incluye..."></textarea></div></div>
+    </div>
+    <div class="btn-row"><button class="btn btn-accent" onclick="analizarPresupuestos()">Analizar con IA ↗</button></div>
+    <div id="presup-output" style="display:none" class="ia-output"></div>
+  </div>
+</div>
+
+<!-- ===== ASISTENTE IA ===== -->
+<div id="asistente" class="page">
+  <div class="page-header">
+    <div class="page-eyebrow">IA especializada</div>
+    <div class="page-title">Asistente IA</div>
+    <div class="page-sub">Entrenado para LAUGH · Fútbol argentino · AFA</div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-title">Acciones frecuentes</div></div>
+    <div class="ia-chips">
+      <button class="ia-chip" onclick="setIA('Armame un calendario editorial de fútbol para mayo 2025 con la Liga Profesional Argentina')">Calendario editorial</button>
+      <button class="ia-chip" onclick="setIA('Generame 10 ideas de contenido para Instagram sobre el próximo Superclásico River vs Boca')">Ideas Superclásico</button>
+      <button class="ia-chip" onclick="setIA('Armame un brief de preproducción para la cobertura en vivo de un partido de la Liga Profesional')">Brief cobertura</button>
+      <button class="ia-chip" onclick="setIA('¿Qué fechas históricas y efemérides importantes de clubes de AFA caen en mayo?')">Efemérides mayo</button>
+      <button class="ia-chip" onclick="setIA('Redactame un mail profesional para presentarme como nuevo integrante del equipo a un cliente de la agencia')">Mail cliente nuevo</button>
+      <button class="ia-chip" onclick="setIA('Armame una plantilla de informe mensual de redes sociales para una agencia de marketing deportivo')">Informe mensual</button>
+      <button class="ia-chip" onclick="setIA('Cuáles son las mejores estrategias para hacer cobertura en vivo de fútbol en Instagram Stories en 2025?')">Tips de cobertura</button>
+      <button class="ia-chip" onclick="setIA('Generame un análisis de los rivales más mediáticos de la Liga Profesional para planificar el contenido de mayor impacto')">Partidos de impacto</button>
+    </div>
+    <div class="form-group"><label class="form-label">Tu consulta</label><textarea id="ia-input" placeholder="Escribí lo que necesitás..." style="min-height:110px"></textarea></div>
+    <div class="btn-row">
+      <button class="btn btn-accent" onclick="runIA()">Generar ↗</button>
+      <button class="btn btn-ghost" onclick="clearIA()">Limpiar</button>
+    </div>
+    <div id="ia-output" class="ia-output" style="display:none"></div>
+  </div>
+</div>
+
+</main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ======= STATE =======
+let myEvents = JSON.parse(localStorage.getItem('laugh-events') || '[]');
+let myTareas = null;
+let calMonth = new Date().getMonth(), calYear = new Date().getFullYear();
+
+// ======= NAV =======
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ======= TOAST =======
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ======= FECHA HOY =======
+function setFechaHoy() {
+  const now = new Date();
+  const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+  document.getElementById('fecha-hoy').textContent = now.toLocaleDateString('es-AR', opts);
+}
+
+// ======= FIXTURES (API-Football vía fetch con fallback) =======
+const LIGA_TEAMS = [
+  {id:1,name:'River Plate',short:'RIV'},{id:2,name:'Boca Juniors',short:'BOC'},
+  {id:3,name:'Racing Club',short:'RAC'},{id:4,name:'Independiente',short:'IND'},
+  {id:5,name:'San Lorenzo',short:'SLO'},{id:6,name:'Huracán',short:'HUR'},
+  {id:7,name:'Vélez Sársfield',short:'VEL'},{id:8,name:'Estudiantes',short:'EST'},
+  {id:9,name:'Lanús',short:'LAN'},{id:10,name:'Banfield',short:'BAN'},
+  {id:11,name:'Argentinos Jrs',short:'ARG'},{id:12,name:'Godoy Cruz',short:'GOD'},
+  {id:13,name:'Talleres',short:'TAL'},{id:14,name:'Belgrano',short:'BEL'},
+  {id:15,name:'Platense',short:'PLA'},{id:16,name:'Defensa y Just.',short:'DEF'},
+  {id:17,name:'Tigre',short:'TIG'},{id:18,name:'Unión',short:'UNI'},
+  {id:19,name:'Colón',short:'COL'},{id:20,name:'Atlético Tucumán',short:'ATU'},
+  {id:21,name:'Sarmiento',short:'SAR'},{id:22,name:'Newell\'s',short:'NEW'},
+  {id:23,name:'Rosario Central',short:'CEN'},{id:24,name:'Gimnasia LP',short:'GIM'},
+  {id:25,name:'San Martín SJ',short:'SJN'},{id:26,name:'Barracas Central',short:'BAR'},
+  {id:27,name:'Riestra',short:'RIE'},{id:28,name:'Instituto',short:'INS'},
+];
+
+// Simulated fixture data (real API would go here)
+const FIXTURE_DATA = {
+  live: [
+    { home:'River Plate', away:'Boca Juniors', score:'1 - 0', time:'67\'', status:'live' },
+    { home:'Racing Club', away:'Independiente', score:'0 - 0', time:'23\'', status:'live' },
+  ],
+  next: [
+    { home:'San Lorenzo', away:'Vélez', date:'28/04 20:00', status:'next' },
+    { home:'Estudiantes', away:'Lanús', date:'28/04 17:30', status:'next' },
+    { home:'Huracán', away:'Talleres', date:'29/04 15:00', status:'next' },
+    { home:'Godoy Cruz', away:'Belgrano', date:'29/04 19:00', status:'next' },
+  ]
+};
+
+function renderMatchCard(m) {
+  if (m.status === 'live') {
+    return `<div class="match-card">
+      <div><div class="match-teams">${m.home} vs ${m.away}</div><div class="match-meta"><span class="live-dot"></span>${m.time} · En juego</div></div>
+      <div class="match-score">${m.score}</div>
+    </div>`;
+  } else {
+    return `<div class="match-card">
+      <div><div class="match-teams">${m.home} vs ${m.away}</div><div class="match-meta">${m.date}</div></div>
+      <span class="pill pill-gray">próximo</span>
+    </div>`;
+  }
+}
+
+function loadFixtures() {
+  const liveEl = document.getElementById('fixtures-live');
+  const nextEl = document.getElementById('fixtures-next');
+  const inicioEl = document.getElementById('inicio-matches');
+
+  if (liveEl) {
+    if (FIXTURE_DATA.live.length > 0) {
+      liveEl.innerHTML = FIXTURE_DATA.live.map(renderMatchCard).join('');
+    } else {
+      liveEl.innerHTML = '<div style="font-size:13px;color:var(--text3);padding:10px 0">No hay partidos en este momento</div>';
+    }
+  }
+  if (nextEl) nextEl.innerHTML = FIXTURE_DATA.next.map(renderMatchCard).join('');
+  if (inicioEl) inicioEl.innerHTML = [...FIXTURE_DATA.live, ...FIXTURE_DATA.next.slice(0,2)].map(renderMatchCard).join('');
+
+  document.getElementById('m-partidos').textContent = FIXTURE_DATA.live.length;
+
+  // Tabla
+  const tabla = document.getElementById('tabla-posiciones');
+  if (tabla) {
+    const equipos = LIGA_TEAMS.slice(0,16).map((t,i) => ({
+      pos: i+1, name: t.name, pj: 14+Math.floor(Math.random()*2), pts: 30-i*1.8+Math.random()*2, dif: 15-i*1.2
+    })).sort((a,b) => b.pts - a.pts).map((e,i) => ({...e, pos: i+1}));
+
+    tabla.innerHTML = equipos.map(e => `
+      <tr>
+        <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text3)">${e.pos}</td>
+        <td style="font-weight:500">${e.name}</td>
+        <td style="font-family:'DM Mono',monospace;font-size:12px">${e.pj}</td>
+        <td style="font-family:'Syne',sans-serif;font-weight:700">${Math.round(e.pts)}</td>
+        <td style="font-family:'DM Mono',monospace;font-size:12px;color:${e.dif>0?'var(--green)':'var(--red)'}">${e.dif>0?'+':''}${Math.round(e.dif)}</td>
+        <td>${e.pos <= 4 ? '<span class="pill pill-green">Copa Lib.</span>' : e.pos >= 14 ? '<span class="pill pill-red">Descenso</span>' : ''}</td>
+      </tr>
+    `).join('');
+  }
+}
+
+// ======= HISTÓRICOS =======
+const HISTORICOS = [
+  { fecha:'25/05', año:1986, titulo:'Campeón Mundial — Maradona', club:'AFA / Selección', tipo:'seleccion' },
+  { fecha:'29/04', año:1947, titulo:'River Plate gana su primera Copa Argentina', club:'River Plate', tipo:'river' },
+  { fecha:'27/04', año:1931, titulo:'Fundación de la Liga Profesional Argentina', club:'AFA', tipo:'afa' },
+  { fecha:'28/04', año:1944, titulo:'Boca Juniors campeón invicto — recordmarca', club:'Boca Juniors', tipo:'boca' },
+  { fecha:'01/05', año:1967, titulo:'Racing Club campeón del Mundo', club:'Racing Club', tipo:'racing' },
+  { fecha:'03/05', año:1986, titulo:'Independiente gana su 7ma Copa Libertadores', club:'Independiente', tipo:'independiente' },
+  { fecha:'10/05', año:1974, titulo:'San Lorenzo logra su primer título nacional', club:'San Lorenzo', tipo:'sanlorenzo' },
+  { fecha:'15/05', año:1938, titulo:'Huracán campeón de Sudamérica', club:'Huracán', tipo:'huracan' },
+  { fecha:'20/05', año:1986, titulo:'Argentina 6 — Ecuador 1, previa al Mundial', club:'Selección', tipo:'seleccion' },
+  { fecha:'22/05', año:2018, titulo:'Estudiantes invicto en Liga Profesional', club:'Estudiantes', tipo:'estudiantes' },
+  { fecha:'02/06', año:1978, titulo:'Argentina campeón del Mundo — Mario Kempes', club:'AFA / Selección', tipo:'seleccion' },
+  { fecha:'07/06', año:1913, titulo:'Fundación de Racing Club', club:'Racing Club', tipo:'racing' },
+  { fecha:'11/04', año:1905, titulo:'Fundación de Boca Juniors', club:'Boca Juniors', tipo:'boca' },
+  { fecha:'25/03', año:1901, titulo:'Fundación de River Plate', club:'River Plate', tipo:'river' },
+];
+
+function getEfemeridesHoy() {
+  const now = new Date();
+  const dd = String(now.getDate()).padStart(2,'0');
+  const mm = String(now.getMonth()+1).padStart(2,'0');
+  const hoy = `${dd}/${mm}`;
+  const semana = [];
+  for (let i = -3; i <= 3; i++) {
+    const d = new Date(now); d.setDate(d.getDate() + i);
+    const key = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
+    HISTORICOS.filter(h => h.fecha === key).forEach(h => semana.push({...h, diff: i}));
+  }
+  return semana;
+}
+
+function renderHistoricos() {
+  const semana = getEfemeridesHoy();
+  const el = document.getElementById('efemerides-semana');
+  if (!el) return;
+  if (semana.length === 0) {
+    el.innerHTML = '<div style="font-size:13px;color:var(--text3)">No hay efemérides esta semana</div>';
+  } else {
+    el.innerHTML = semana.map(h => `
+      <div class="historic-item">
+        <div class="historic-year">${h.fecha} · ${h.año} · ${h.diff === 0 ? 'HOY' : h.diff < 0 ? `hace ${Math.abs(h.diff)} días` : `en ${h.diff} días`}</div>
+        <div class="historic-title">${h.titulo}</div>
+        <div class="historic-club">${h.club}</div>
+      </div>
+    `).join('');
+  }
+
+  // Hito del día en inicio
+  const hitoEl = document.getElementById('hito-hoy');
+  if (hitoEl) {
+    const hoy = semana.find(h => h.diff === 0) || HISTORICOS[Math.floor(Math.random() * HISTORICOS.length)];
+    hitoEl.innerHTML = `<span style="color:var(--amber);font-family:'DM Mono',monospace;font-size:12px">${hoy.fecha} · ${hoy.año}</span><br/><span style="font-size:15px;font-weight:500;color:var(--text)">${hoy.titulo}</span><br/><span style="color:var(--text2)">${hoy.club}</span>`;
+  }
+
+  // Timeline
+  const tl = document.getElementById('timeline-historicos');
+  if (tl) {
+    tl.innerHTML = HISTORICOS.sort((a,b) => parseInt(a.año) - parseInt(b.año)).map(h => `
+      <div class="historic-item">
+        <div class="historic-year">${h.año} · ${h.fecha}</div>
+        <div class="historic-title">${h.titulo}</div>
+        <div class="historic-club">${h.club}</div>
+      </div>
+    `).join('');
+  }
+}
+
+function buscarEfemeride() {
+  const val = document.getElementById('hist-fecha').value;
+  if (!val) return;
+  const d = new Date(val + 'T12:00:00');
+  const key = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
+  const found = HISTORICOS.filter(h => h.fecha === key);
+  const el = document.getElementById('hist-result');
+  if (found.length === 0) {
+    el.innerHTML = `<div style="color:var(--text3)">Sin efemérides registradas para ${key}</div>`;
+  } else {
+    el.innerHTML = found.map(h => `<div class="historic-item"><div class="historic-year">${h.año}</div><div class="historic-title">${h.titulo}</div><div class="historic-club">${h.club}</div></div>`).join('');
+  }
+}
+
+// ======= CALENDARIO =======
+function renderCalendar() {
+  const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const days = ['Lu','Ma','Mi','Ju','Vi','Sá','Do'];
+  const now = new Date();
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const offset = firstDay === 0 ? 6 : firstDay - 1;
+  const total = new Date(calYear, calMonth + 1, 0).getDate();
+  const evDays = myEvents
+    .filter(e => { const d = new Date(e.fecha+'T12:00:00'); return d.getMonth()===calMonth && d.getFullYear()===calYear; })
+    .map(e => new Date(e.fecha+'T12:00:00').getDate());
+  const histDays = HISTORICOS
+    .filter(h => { const [dd,mm] = h.fecha.split('/'); return parseInt(mm)-1 === calMonth; })
+    .map(h => parseInt(h.fecha.split('/')[0]));
+
+  const el = document.getElementById('cal-container');
+  if (!el) return;
+  let html = `<div class="cal-nav"><div class="cal-month">${months[calMonth]} ${calYear}</div><div style="display:flex;gap:6px"><button class="cal-btn" onclick="prevMonth()">‹</button><button class="cal-btn" onclick="nextMonth()">›</button></div></div>`;
+  html += `<div class="cal-grid">${days.map(d=>`<div class="cal-head">${d}</div>`).join('')}${Array(offset).fill('<div class="cal-cell empty"></div>').join('')}`;
+  for (let d = 1; d <= total; d++) {
+    const isToday = d===now.getDate() && calMonth===now.getMonth() && calYear===now.getFullYear();
+    const hasEv = evDays.includes(d);
+    const isHist = histDays.includes(d);
+    html += `<div class="cal-cell ${isToday?'today':''} ${hasEv?'has-event':''} ${isHist&&!isToday?'historic':''}">${d}</div>`;
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function prevMonth() { calMonth===0?(calMonth=11,calYear--):calMonth--; renderCalendar(); }
+function nextMonth() { calMonth===11?(calMonth=0,calYear++):calMonth++; renderCalendar(); }
+
+function addEvent() {
+  const nombre = document.getElementById('ev-nombre').value.trim();
+  const fecha = document.getElementById('ev-fecha').value;
+  const tipo = document.getElementById('ev-tipo').value;
+  const notas = document.getElementById('ev-notas').value.trim();
+  if (!nombre || !fecha) { showToast('Completá nombre y fecha'); return; }
+  myEvents.push({ nombre, fecha, tipo, notas });
+  localStorage.setItem('laugh-events', JSON.stringify(myEvents));
+  renderCalendar(); renderEventList();
+  document.getElementById('ev-nombre').value = '';
+  document.getElementById('ev-fecha').value = '';
+  document.getElementById('ev-notas').value = '';
+  showToast('Evento guardado ✓');
+}
+
+function renderEventList() {
+  const el = document.getElementById('ev-list');
+  if (!el) return;
+  if (myEvents.length === 0) { el.innerHTML = '<div style="font-size:13px;color:var(--text3)">Sin eventos cargados</div>'; return; }
+  el.innerHTML = myEvents.slice().reverse().slice(0,6).map(e => `
+    <div style="padding:10px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start">
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:5px;flex-shrink:0"></div>
+      <div><div style="font-size:13px;font-weight:500">${e.nombre}</div><div style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace">${e.tipo} · ${e.fecha}</div></div>
+    </div>
+  `).join('');
+}
+
+// ======= CONTENIDO =======
+function addPieza() {
+  const nombre = prompt('Nombre de la pieza:'); if (!nombre) return;
+  const formato = prompt('Formato:') || 'N/A';
+  const fecha = prompt('Fecha (DD/MM):') || '-';
+  const table = document.getElementById('content-table');
+  const n = table.rows.length + 1;
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td style="color:var(--text3);font-family:'DM Mono',monospace;font-size:11px">${String(n).padStart(2,'0')}</td><td>${nombre}</td><td><span class="tag" style="background:var(--surface3);color:var(--text2)">${formato}</span></td><td style="font-family:'DM Mono',monospace;font-size:12px">${fecha}</td><td><span class="pill pill-gray">Pendiente</span></td><td><button class="btn btn-ghost" style="padding:3px 10px;font-size:11px" onclick="toggleEstado(this)">✓</button></td>`;
+  table.appendChild(tr); showToast('Pieza agregada ✓');
+}
+
+function toggleEstado(btn) {
+  const td = btn.closest('tr').querySelector('td:nth-child(5)');
+  if (td.innerHTML.includes('Listo')) {
+    td.innerHTML = '<span class="pill pill-gray">Pendiente</span>';
+  } else {
+    td.innerHTML = '<span class="pill pill-green">Listo</span>';
+  }
+  showToast('Estado actualizado');
+}
+
+// ======= PROGRESO & KPIs =======
+function toggleTask(el) {
+  el.classList.toggle('done');
+  const name = el.nextElementSibling;
+  name.classList.toggle('done');
+  updateTaskSummary();
+}
+
+function updateTaskSummary() {
+  const total = document.querySelectorAll('.task-row').length;
+  const done = document.querySelectorAll('.task-check.done').length;
+  const el = document.getElementById('task-summary');
+  if (el) { el.textContent = `${done} de ${total} tareas completadas esta semana`; }
+  document.getElementById('m-tareas').textContent = `${done}/${total}`;
+}
+
+function addTarea() {
+  const nombre = prompt('Nombre de la tarea:'); if (!nombre) return;
+  const fecha = prompt('Fecha (DD/MM):') || '-';
+  const list = document.getElementById('tareas-list');
+  const div = document.createElement('div');
+  div.className = 'task-row';
+  div.innerHTML = `<div class="task-check" onclick="toggleTask(this)"><svg viewBox="0 0 12 12" fill="black"><path d="M2 6l3 3 5-5"/></svg></div><div class="task-name">${nombre}</div><div class="task-due">${fecha}</div>`;
+  list.appendChild(div);
+  updateTaskSummary(); showToast('Tarea agregada ✓');
+}
+
+function editKPIs() {
+  const seg = prompt('Instagram — Seguidores:', document.getElementById('k-ig-seg').textContent);
+  if (seg) document.getElementById('k-ig-seg').textContent = seg;
+  const alc = prompt('Instagram — Alcance:', document.getElementById('k-ig-alc').textContent);
+  if (alc) document.getElementById('k-ig-alc').textContent = alc;
+  const eng = prompt('Instagram — Engagement %:', document.getElementById('k-ig-eng').textContent);
+  if (eng) document.getElementById('k-ig-eng').textContent = eng;
+  const tt = prompt('TikTok — Seguidores:', document.getElementById('k-tt-seg').textContent);
+  if (tt) document.getElementById('k-tt-seg').textContent = tt;
+  showToast('KPIs actualizados ✓');
+}
+
+// ======= OPERACIONES =======
+function addFactura() {
+  const cliente = prompt('Cliente:'); if (!cliente) return;
+  const concepto = prompt('Concepto:') || 'N/A';
+  const monto = prompt('Monto (ARS):') || '0';
+  const table = document.getElementById('fact-table');
+  const tr = document.createElement('tr');
+  const now = new Date();
+  const periodo = `${now.toLocaleString('es',{month:'short'})} ${now.getFullYear()}`;
+  tr.innerHTML = `<td>${cliente}</td><td>${concepto}</td><td style="font-family:'DM Mono',monospace;font-size:12px">${periodo}</td><td style="font-family:'DM Mono',monospace">$${parseInt(monto).toLocaleString()}</td><td><span class="pill pill-amber">Pendiente</span></td>`;
+  table.insertBefore(tr, table.firstChild);
+  showToast('Factura agregada ✓');
+}
+
+async function analizarPresupuestos() {
+  const nombres = [...document.querySelectorAll('.prov-nombre')].map(i => i.value || 'Sin nombre');
+  const montos = [...document.querySelectorAll('.prov-monto')].map(i => i.value || '0');
+  const detalles = [...document.querySelectorAll('.prov-detalle')].map(i => i.value || 'Sin detalle');
+  const prompt = `Analizá estos 3 presupuestos de producción para una agencia de marketing deportivo argentina:\n1. ${nombres[0]}: $${montos[0]} - ${detalles[0]}\n2. ${nombres[1]}: $${montos[1]} - ${detalles[1]}\n3. ${nombres[2]}: $${montos[2]} - ${detalles[2]}\n\nHacé un análisis comparativo con criterios objetivos (precio, calidad, relación precio-valor) y recomendá cuál elegir y por qué. Sé concreto.`;
+  await callClaude(prompt, document.getElementById('presup-output'));
+}
+
+async function generarPP() {
+  const evento = document.getElementById('pp-evento').value || 'Partido de fútbol';
+  const formato = document.getElementById('pp-formato').value;
+  const objetivo = document.getElementById('pp-objetivo').value || 'Generar contenido de calidad';
+  const recursos = document.getElementById('pp-recursos').value || 'Recursos básicos';
+  const p = `Armame una propuesta de preproducción detallada: Evento: ${evento}, Formato: ${formato}, Objetivo: ${objetivo}, Recursos: ${recursos}. Incluí: lista de tomas, estructura del contenido, timing, recursos necesarios y sugerencias de publicación.`;
+  await callClaude(p, document.getElementById('pp-output'));
+}
+
+// ======= IA =======
+async function callClaude(userPrompt, outputEl) {
+  outputEl.style.display = 'block';
+  outputEl.innerHTML = '<span class="spinner"></span>Generando con IA...';
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({
+        model:"claude-sonnet-4-20250514",
+        max_tokens:1000,
+        system:"Sos un asistente especializado en marketing deportivo y fútbol argentino. Trabajás para LAUGH, una agencia argentina de marketing deportivo. El usuario se llama Benja, tiene 21 años y acaba de empezar a trabajar. Sus tareas incluyen: investigación del calendario deportivo de la Liga Profesional AFA, organización de contenido, propuestas de preproducción, gestión administrativa, seguimiento de facturación y comparativa de presupuestos. Respondé siempre en español rioplatense, de manera práctica y profesional. Usá bullet points cuando corresponda. Conocés todos los clubes de la Liga Profesional Argentina y sus historias.",
+        messages:[{role:"user",content:userPrompt}]
+      })
+    });
+    const data = await res.json();
+    const text = data.content.map(i=>i.text||"").join("\n");
+    outputEl.textContent = text;
+  } catch(e) {
+    outputEl.textContent = "Error al conectar. Revisá tu conexión a internet.";
+  }
+}
+
+function setIA(text) { document.getElementById('ia-input').value = text; }
+async function runIA() {
+  const input = document.getElementById('ia-input').value.trim();
+  if (!input) return;
+  await callClaude(input, document.getElementById('ia-output'));
+}
+function clearIA() {
+  document.getElementById('ia-input').value = '';
+  const o = document.getElementById('ia-output');
+  o.style.display='none'; o.textContent='';
+}
+
+function goIA(prompt) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('asistente').classList.add('active');
+  document.querySelectorAll('.nav-item')[7].classList.add('active');
+  setIA(prompt); runIA();
+}
+
+function filterHistoric(tipo, btn) {
+  document.querySelectorAll('#club-filters .ia-chip').forEach(b => b.classList.remove('active-chip'));
+  btn.classList.add('active-chip');
+}
+
+// ======= INIT =======
+setFechaHoy();
+loadFixtures();
+renderHistoricos();
+renderCalendar();
+renderEventList();
+updateTaskSummary();
+setInterval(loadFixtures, 60000);
+</script>
+</body>
+</html>
