@@ -437,11 +437,25 @@ tr:hover td{background:rgba(255,255,255,0.015)}
 <div id="calendario" class="page">
   <div class="pg-eye">Planificación</div>
   <div class="pg-title">Calendario</div>
-  <div class="pg-sub"><span style="color:var(--acc)">●</span> Tus eventos &nbsp;<span style="color:var(--blue)">●</span> Partidos &nbsp;<span style="color:var(--amber)">●</span> Efemérides</div>
+  <div class="pg-sub"><span style="color:var(--acc)">●</span> Tus eventos &nbsp;<span style="color:var(--blue)">●</span> Partidos &nbsp;<span style="color:var(--amber)">●</span> Efemérides · <strong>Click en cualquier día para agregar o ver eventos</strong></div>
 
   <div class="grid2">
     <div>
       <div class="card"><div id="cal-wrap"></div></div>
+      <!-- DIA SELECCIONADO -->
+      <div class="card" id="cal-day-panel" style="margin-top:12px;display:none;border-color:rgba(0,229,160,0.25)">
+        <div class="card-head">
+          <div class="card-title" style="color:var(--acc)" id="cal-day-titulo">Día seleccionado</div>
+          <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="document.getElementById('cal-day-panel').style.display='none'">✕</button>
+        </div>
+        <div id="cal-day-body"></div>
+        <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:10px">
+          <div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.06em">Agregar evento en este día</div>
+          <div class="fg"><input type="text" id="cal-quick-nombre" placeholder="Nombre del evento..."/></div>
+          <div class="fg"><select id="cal-quick-tipo"><option>Cobertura</option><option>Entrega</option><option>Reunión</option><option>Campaña</option><option>Producción</option><option>Otro</option></select></div>
+          <button class="btn btn-acc" style="width:100%;justify-content:center" onclick="addEventoRapido()">Agregar ↗</button>
+        </div>
+      </div>
       <div class="card" style="margin-top:12px">
         <div class="card-head"><div class="card-title">Próximos partidos</div></div>
         <div id="prox-partidos"></div>
@@ -449,17 +463,8 @@ tr:hover td{background:rgba(255,255,255,0.015)}
     </div>
     <div>
       <div class="card">
-        <div class="card-head"><div class="card-title">Agregar evento</div></div>
-        <div class="fg"><label class="fl">Nombre</label><input type="text" id="ev-nombre" placeholder="Nombre del evento"/></div>
-        <div class="fg"><label class="fl">Fecha</label><input type="date" id="ev-fecha"/></div>
-        <div class="fg"><label class="fl">Tipo</label>
-          <select id="ev-tipo"><option>Cobertura</option><option>Entrega</option><option>Reunión</option><option>Campaña</option><option>Otro</option></select>
-        </div>
-        <div class="btn-row"><button class="btn btn-acc" onclick="addEvento()">Guardar ↗</button></div>
-        <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px">
-          <div class="card-title" style="margin-bottom:8px">Tus eventos</div>
-          <div id="ev-list"></div>
-        </div>
+        <div class="card-head"><div class="card-title">Todos los eventos</div><button class="btn btn-acc" style="font-size:11px;padding:5px 11px" onclick="abrirFormEvento()">+ Nuevo evento</button></div>
+        <div id="ev-list"></div>
       </div>
       <div class="card" style="margin-top:12px">
         <div class="card-head"><div class="card-title">Efemérides esta semana</div><span class="badge badge-amber">real</span></div>
@@ -955,61 +960,166 @@ function deletePipeItem(id,col){
 }
 
 // ═══════════════════════════════════════════
-// CALENDARIO
+// CALENDARIO INTERACTIVO
 // ═══════════════════════════════════════════
-let calMes=new Date().getMonth(),calAño=new Date().getFullYear();
+let calMes=new Date().getMonth(),calAño=new Date().getFullYear(),calDiaSelected=null;
+
 function renderCal(){
   const now=new Date();
   const first=new Date(calAño,calMes,1).getDay();
   const offset=first===0?6:first-1;
   const total=new Date(calAño,calMes+1,0).getDate();
   const eventos=S.get('eventos',[]);
-  const evDays={};eventos.filter(e=>{const d=new Date(e.fecha+'T12:00');return d.getMonth()===calMes&&d.getFullYear()===calAño;}).forEach(e=>{const d=new Date(e.fecha+'T12:00').getDate();if(!evDays[d])evDays[d]=[];evDays[d].push(e.nombre);});
-  const histDays={};EFEMERIDES.filter(e=>{const[,mm]=e.f.split('/');return parseInt(mm)-1===calMes;}).forEach(e=>{const d=parseInt(e.f.split('/')[0]);if(!histDays[d])histDays[d]=[];histDays[d].push(e.t);});
-  const partDays={};PARTIDOS.filter(p=>{const d=new Date(p.d);return d.getMonth()===calMes&&d.getFullYear()===calAño;}).forEach(p=>{const d=new Date(p.d).getDate();if(!partDays[d])partDays[d]=[];partDays[d].push(p.h+' vs '+p.v);});
+  const evDays={};
+  eventos.filter(e=>{const d=new Date(e.fecha+'T12:00');return d.getMonth()===calMes&&d.getFullYear()===calAño;})
+    .forEach(e=>{const d=new Date(e.fecha+'T12:00').getDate();if(!evDays[d])evDays[d]=[];evDays[d].push(e);});
+  const histDays={};
+  EFEMERIDES.filter(e=>{const[,mm]=e.f.split('/');return parseInt(mm)-1===calMes;})
+    .forEach(e=>{const d=parseInt(e.f.split('/')[0]);if(!histDays[d])histDays[d]=[];histDays[d].push(e.t);});
+  const partDays={};
+  PARTIDOS.filter(p=>{const d=new Date(p.d);return d.getMonth()===calMes&&d.getFullYear()===calAño;})
+    .forEach(p=>{const d=new Date(p.d).getDate();if(!partDays[d])partDays[d]=[];partDays[d].push(p.h+' vs '+p.v);});
   const days=['Lu','Ma','Mi','Ju','Vi','Sa','Do'];
   let html='<div class="cal-nav"><div class="cal-month">'+MESES[calMes]+' '+calAño+'</div><div style="display:flex;gap:4px"><button class="cal-btn" onclick="prevMes()">‹</button><button class="cal-btn" onclick="nextMes()">›</button></div></div>';
   html+='<div class="cal-grid">'+days.map(d=>'<div class="cal-hd">'+d+'</div>').join('')+Array(offset).fill('<div class="cal-cell empty"></div>').join('');
   for(let d=1;d<=total;d++){
     const isToday=d===now.getDate()&&calMes===now.getMonth()&&calAño===now.getFullYear();
-    const tt=(evDays[d]||[]).concat(partDays[d]||[]).concat((histDays[d]||[]).map(h=>'📅 '+h)).join(' / ');
-    const dots=(evDays[d]||partDays[d]||histDays[d])?'<div class="cal-dots">'+(evDays[d]?'<div class="cal-dot ev"></div>':'')+(partDays[d]?'<div class="cal-dot partido"></div>':'')+(histDays[d]?'<div class="cal-dot efem"></div>':'')+'</div>':'';
-    html+='<div class="cal-cell'+(isToday?' today':'')+(evDays[d]?' has-ev':'')+(partDays[d]?' has-partido':'')+'" title="'+tt+'">'+d+dots+'</div>';
+    const isSel=d===calDiaSelected;
+    const hasEv=!!evDays[d],hasPart=!!partDays[d],hasHist=!!histDays[d];
+    const dots=(hasEv||hasPart||hasHist)?'<div class="cal-dots">'+(hasEv?'<div class="cal-dot ev"></div>':'')+(hasPart?'<div class="cal-dot partido"></div>':'')+(hasHist?'<div class="cal-dot efem"></div>':'')+'</div>':'';
+    const selStyle=isSel&&!isToday?'background:var(--s3);border:1px solid var(--acc);color:var(--acc);font-weight:700;':'';
+    html+=`<div class="cal-cell${isToday?' today':''}${hasEv?' has-ev':''}${hasPart?' has-partido':''}" style="cursor:pointer;${selStyle}" onclick="clickDia(${d})" title="${d} de ${MESES[calMes]}">${d}${dots}</div>`;
   }
   html+='</div>';
   document.getElementById('cal-wrap').innerHTML=html;
   // próximos partidos
+  const prox=PARTIDOS.filter(p=>new Date(p.d)>=now).slice(0,4);
   const pp=document.getElementById('prox-partidos');
-  if(pp){
-    const prox=PARTIDOS.filter(p=>new Date(p.d)>=now).slice(0,4);
-    pp.innerHTML=prox.map(p=>'<div class="partido-tag"><div class="partido-fecha">'+new Date(p.d+'T12:00').toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit',year:'numeric'})+' · '+p.t+'</div><div class="partido-titulo">'+p.h+' vs '+p.v+'</div></div>').join('');
-  }
-  document.getElementById('dash-partido').textContent=PARTIDOS.filter(p=>new Date(p.d)>=now)[0]?.h+' vs '+PARTIDOS.filter(p=>new Date(p.d)>=now)[0]?.v||'—';
+  if(pp)pp.innerHTML=prox.map(p=>'<div class="partido-tag"><div class="partido-fecha">'+new Date(p.d+'T12:00').toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit',year:'numeric'})+' · '+p.t+'</div><div class="partido-titulo">'+p.h+' vs '+p.v+'</div></div>').join('');
+  // próximo partido en dashboard
+  const prox0=prox[0];
+  const dp=document.getElementById('dash-partido');
+  if(dp&&prox0)dp.textContent=prox0.h+' vs '+prox0.v;
 }
-function prevMes(){calMes===0?(calMes=11,calAño--):calMes--;renderCal();}
-function nextMes(){calMes===11?(calMes=0,calAño++):calMes++;renderCal();}
-function addEvento(){
-  const nombre=document.getElementById('ev-nombre').value.trim();
-  const fecha=document.getElementById('ev-fecha').value;
-  if(!nombre||!fecha){toast('Completá nombre y fecha');return;}
+
+function clickDia(d){
+  calDiaSelected=d;
+  renderCal();
+  const fechaStr=calAño+'-'+String(calMes+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
   const eventos=S.get('eventos',[]);
-  eventos.push({id:Date.now(),nombre,fecha,tipo:document.getElementById('ev-tipo').value});
-  S.set('eventos',eventos);renderCal();renderEventos();
-  document.getElementById('ev-nombre').value='';document.getElementById('ev-fecha').value='';
-  toast('Evento guardado ✓');
+  const delDia=eventos.filter(e=>e.fecha===fechaStr);
+  const efemDia=EFEMERIDES.filter(e=>e.f===String(d).padStart(2,'0')+'/'+String(calMes+1).padStart(2,'0'));
+  const partDia=PARTIDOS.filter(p=>p.d===fechaStr);
+  const panel=document.getElementById('cal-day-panel');
+  const titulo=document.getElementById('cal-day-titulo');
+  titulo.textContent=d+' de '+MESES[calMes]+' '+calAño;
+  // Guardar fecha seleccionada para agregar rápido
+  panel.dataset.fecha=fechaStr;
+  let html='';
+  if(partDia.length){
+    html+='<div style="margin-bottom:10px"><div style="font-size:9px;color:var(--blue);font-family:\'DM Mono\',monospace;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:5px">PARTIDO</div>';
+    html+=partDia.map(p=>'<div class="partido-tag"><div class="partido-titulo">'+p.h+' vs '+p.v+'</div><div class="partido-fecha">'+p.t+'</div></div>').join('');
+    html+='</div>';
+  }
+  if(efemDia.length){
+    html+='<div style="margin-bottom:10px"><div style="font-size:9px;color:var(--amber);font-family:\'DM Mono\',monospace;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:5px">EFEMÉRIDE</div>';
+    html+=efemDia.map(e=>'<div class="efem-tag"><div class="efem-year">'+e.a+'</div><div class="efem-txt">'+e.t+'</div></div>').join('');
+    html+='</div>';
+  }
+  if(delDia.length){
+    html+='<div style="margin-bottom:10px"><div style="font-size:9px;color:var(--acc);font-family:\'DM Mono\',monospace;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:5px">TUS EVENTOS</div>';
+    html+=delDia.map(e=>`
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--s2);border:1px solid var(--border);border-radius:var(--r-sm);margin-bottom:5px">
+        <div>
+          <div style="font-size:12px;font-weight:600">${e.nombre}</div>
+          <div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace">${e.tipo||'Evento'}</div>
+        </div>
+        <button onclick="deleteEvento(${e.id})" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:12px;padding:4px">✕</button>
+      </div>`).join('');
+    html+='</div>';
+  }
+  if(!html)html='<div style="font-size:12px;color:var(--text3);margin-bottom:8px">Sin eventos este día. Agregá uno abajo.</div>';
+  document.getElementById('cal-day-body').innerHTML=html;
+  panel.style.display='block';
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
+
+function addEventoRapido(){
+  const nombre=document.getElementById('cal-quick-nombre').value.trim();
+  if(!nombre){toast('Escribí un nombre');return;}
+  const fecha=document.getElementById('cal-day-panel').dataset.fecha;
+  if(!fecha){toast('Seleccioná un día en el calendario');return;}
+  const tipo=document.getElementById('cal-quick-tipo').value;
+  const eventos=S.get('eventos',[]);
+  eventos.push({id:Date.now(),nombre,fecha,tipo});
+  S.set('eventos',eventos);
+  document.getElementById('cal-quick-nombre').value='';
+  renderCal();renderEventos();
+  // Refrescar panel del día
+  clickDia(calDiaSelected);
+  toast('Evento agregado ✓');
+}
+
+function abrirFormEvento(){
+  const fechaDefault=calDiaSelected&&calAño&&calMes!=null
+    ?calAño+'-'+String(calMes+1).padStart(2,'0')+'-'+String(calDiaSelected).padStart(2,'0')
+    :'';
+  modal('Nuevo evento',
+    '<div class="fg"><label class="fl">Nombre</label><input type="text" id="mm-ev-nom" placeholder="Nombre del evento"/></div>'+
+    '<div class="fg"><label class="fl">Fecha</label><input type="date" id="mm-ev-fecha" value="'+fechaDefault+'"/></div>'+
+    '<div class="fg"><label class="fl">Tipo</label><select id="mm-ev-tipo"><option>Cobertura</option><option>Entrega</option><option>Reunión</option><option>Campaña</option><option>Producción</option><option>Otro</option></select></div>'+
+    '<div class="fg"><label class="fl">Notas (opcional)</label><input type="text" id="mm-ev-notas" placeholder="Detalles..."/></div>',
+    ()=>{
+      const nombre=document.getElementById('mm-ev-nom').value.trim();
+      const fecha=document.getElementById('mm-ev-fecha').value;
+      if(!nombre||!fecha){toast('Completá nombre y fecha');return;}
+      const eventos=S.get('eventos',[]);
+      eventos.push({id:Date.now(),nombre,fecha,tipo:document.getElementById('mm-ev-tipo').value,notas:document.getElementById('mm-ev-notas').value});
+      S.set('eventos',eventos);renderCal();renderEventos();cerrarModal();toast('Evento guardado ✓');
+      // Si el día del evento es el seleccionado, refrescar panel
+      const d=new Date(fecha+'T12:00');
+      if(d.getMonth()===calMes&&d.getFullYear()===calAño&&d.getDate()===calDiaSelected)clickDia(calDiaSelected);
+    }
+  );
+}
+
+// Mantener addEvento para compatibilidad con guardarIdeaCompleta
+function addEvento(){abrirFormEvento();}
+
+function prevMes(){calMes===0?(calMes=11,calAño--):calMes--;calDiaSelected=null;renderCal();}
+function nextMes(){calMes===11?(calMes=0,calAño++):calMes++;calDiaSelected=null;renderCal();}
+
 function renderEventos(){
   const el=document.getElementById('ev-list');if(!el)return;
   const eventos=S.get('eventos',[]);
-  if(!eventos.length){el.innerHTML='<div style="font-size:12px;color:var(--text3)">Sin eventos aún</div>';return;}
-  el.innerHTML=eventos.slice().reverse().map(e=>`
-    <div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
-      <div style="width:5px;height:5px;border-radius:50%;background:var(--acc);flex-shrink:0"></div>
-      <div style="flex:1"><div style="font-size:12px;font-weight:500">${e.nombre}</div><div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace">${e.tipo} · ${e.fecha}</div></div>
-      <button onclick="deleteEvento(${e.id})" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:11px">✕</button>
+  if(!eventos.length){el.innerHTML='<div style="font-size:12px;color:var(--text3)">Sin eventos aún. Hacé click en cualquier día del calendario.</div>';return;}
+  const sorted=eventos.slice().sort((a,b)=>a.fecha>b.fecha?1:-1);
+  const tipoColor={Cobertura:'var(--acc)',Entrega:'var(--blue)',Reunión:'var(--purple)',Campaña:'var(--amber)',Producción:'var(--red)',Otro:'var(--text3)'};
+  el.innerHTML=sorted.map(e=>`
+    <div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;cursor:pointer" onclick="irAFecha('${e.fecha}')">
+      <div style="width:3px;height:36px;border-radius:2px;background:${tipoColor[e.tipo]||'var(--text3)'};flex-shrink:0"></div>
+      <div style="flex:1">
+        <div style="font-size:12px;font-weight:500">${e.nombre}</div>
+        <div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace">${e.tipo} · ${new Date(e.fecha+'T12:00').toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'})}</div>
+        ${e.notas?'<div style="font-size:10px;color:var(--text3);margin-top:1px">'+e.notas+'</div>':''}
+      </div>
+      <button onclick="event.stopPropagation();deleteEvento(${e.id})" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:11px;padding:4px">✕</button>
     </div>`).join('');
 }
-function deleteEvento(id){S.set('eventos',S.get('eventos',[]).filter(e=>e.id!==id));renderEventos();renderCal();toast('Evento eliminado');}
+
+function irAFecha(fechaStr){
+  const d=new Date(fechaStr+'T12:00');
+  calMes=d.getMonth();calAño=d.getFullYear();
+  renderCal();
+  clickDia(d.getDate());
+}
+
+function deleteEvento(id){
+  S.set('eventos',S.get('eventos',[]).filter(e=>e.id!==id));
+  renderEventos();renderCal();
+  if(calDiaSelected)clickDia(calDiaSelected);
+  toast('Evento eliminado');
+}
 
 // ═══════════════════════════════════════════
 // CAMPAÑAS
