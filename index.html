@@ -878,27 +878,121 @@ function renderAnalisis(){
 function guardarIdeaCompleta(destino){
   if(!ideaSeleccionada){toast('Confirmá la idea primero');return;}
   const id=ideaSeleccionada;
-  if(destino==='pipeline'||destino==='ambos'){
-    const items=S.get('pipe_items',{pendiente:[],proceso:[],revision:[],listo:[]});
-    items.pendiente.push({id:Date.now(),titulo:id.titulo,formato:id.formato,col:'pendiente',presupuesto:id._presupTotal||0});
-    S.set('pipe_items',items);renderPipeline();
+  const campanas=S.get('campanias',[]);
+  const campOpts=campanas.length
+    ? campanas.map(c=>'<option value="'+c.id+'">'+c.nombre+(c.cliente?' · '+c.cliente:'')+'</option>').join('')
+    : '<option value="">Sin campañas cargadas</option>';
+
+  // Calcular presupuesto actual
+  const items=[...document.querySelectorAll('.pi-item-idea')].map((el,i)=>({
+    item:el.value,monto:parseFloat(document.querySelectorAll('.pi-monto-idea')[i]?.value||0)||0
+  })).filter(i=>i.item&&i.monto>0);
+  const totalPres=id._presupTotal||items.reduce((s,i)=>s+i.monto,0)||0;
+
+  // Efeméride/partido del día para sugerir fecha
+  const now=new Date();
+  const efemHoy=EFEMERIDES.filter(e=>e.f===efemKey(now));
+  const partProx=PARTIDOS.filter(p=>new Date(p.d)>=now).slice(0,1);
+  let sugerenciaFecha='';
+  if(id.real&&id.diff!=null){
+    const ds=new Date(now);ds.setDate(ds.getDate()+(id.diff||0));
+    sugerenciaFecha=ds.toISOString().split('T')[0];
+  } else if(partProx.length&&id.tipo==='Partido próximo'){
+    sugerenciaFecha=partProx[0].d;
   }
-  if(destino==='calendario'||destino==='ambos'){
-    modal('Agendar: '+id.titulo,
-      '<div class="fg"><label class="fl">Fecha de publicación</label><input type="date" id="mm-fecha"/></div>',
-      ()=>{
-        const fecha=document.getElementById('mm-fecha').value;if(!fecha){toast('Elegí una fecha');return;}
-        const eventos=S.get('eventos',[]);
-        eventos.push({id:Date.now(),nombre:id.titulo,fecha,tipo:id.formato});
-        S.set('eventos',eventos);renderCal();renderEventos();cerrarModal();
-        if(destino==='ambos')toast('Guardado en pipeline y calendario ✓');
-        else toast('Agendado en el calendario ✓');
-      }
-    );
-    return;
-  }
-  if(destino==='pipeline')toast('Guardado en pipeline ✓');
-  if(destino==='ambos')return; // el toast lo maneja el modal
+
+  const resumenPresup=totalPres>0
+    ?'<div style="background:var(--amber-bg);border:1px solid rgba(245,166,35,0.2);border-radius:var(--r-sm);padding:10px 12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;color:var(--text2)">Presupuesto cargado</span><span style="font-family:\'Bebas Neue\',sans-serif;font-size:18px;color:var(--amber)">$'+totalPres.toLocaleString('es-AR')+'</span></div>'
+    :'<div style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;margin-bottom:10px;font-size:12px;color:var(--text3)">Sin presupuesto cargado — podés agregarlo desde la pestaña Presupuesto</div>';
+
+  modal('Confirmar y publicar',
+    // Resumen idea
+    '<div style="background:var(--acc-bg);border:1px solid rgba(0,229,160,0.2);border-radius:var(--r-sm);padding:10px 12px;margin-bottom:12px">'+
+      '<div style="font-size:9px;color:var(--acc);font-family:\'DM Mono\',monospace;margin-bottom:3px;text-transform:uppercase">Idea</div>'+
+      '<div style="font-size:14px;font-weight:700">'+id.titulo+'</div>'+
+      '<div style="font-size:11px;color:var(--text2);margin-top:2px">'+id.formato+(id.club?' · '+id.club:'')+'</div>'+
+    '</div>'+
+    // Presupuesto resumen
+    resumenPresup+
+    // Fecha de publicación
+    '<div class="fg"><label class="fl">📅 Fecha de publicación</label>'+
+      '<input type="date" id="mm-pub-fecha" value="'+sugerenciaFecha+'"/>'+
+      (sugerenciaFecha?'<div style="font-size:10px;color:var(--acc);margin-top:3px;font-family:\'DM Mono\',monospace">✓ Fecha sugerida por el sistema</div>':'')
+    +'</div>'+
+    // Hora sugerida
+    '<div class="fg"><label class="fl">🕐 Hora de publicación</label>'+
+      '<select id="mm-pub-hora">'+
+        '<option value="12:00">12:00 — Mediodía (alto alcance)</option>'+
+        '<option value="18:00">18:00 — Tarde (pico de engagement)</option>'+
+        '<option value="20:00">20:00 — Noche (mejor para reels)</option>'+
+        '<option value="09:00">09:00 — Mañana</option>'+
+        '<option value="21:00">21:00 — Post-partido</option>'+
+      '</select>'+
+    '</div>'+
+    // Estado en pipeline
+    '<div class="fg"><label class="fl">📋 Estado en pipeline</label>'+
+      '<select id="mm-pub-col">'+
+        '<option value="pendiente">Pendiente (recién arranca)</option>'+
+        '<option value="proceso">En proceso (ya se está produciendo)</option>'+
+        '<option value="revision">En revisión (lista para aprobar)</option>'+
+      '</select>'+
+    '</div>'+
+    // Campaña
+    '<div class="fg"><label class="fl">🚀 Vincular a campaña (opcional)</label>'+
+      '<select id="mm-pub-camp"><option value="">Sin campaña</option>'+campOpts+'</select>'+
+    '</div>'+
+    // Notas finales
+    '<div class="fg"><label class="fl">📝 Notas adicionales</label>'+
+      '<input type="text" id="mm-pub-notas" placeholder="Ej: esperar aprobación del cliente, usar archivo X..."/>'+
+    '</div>',
+    ()=>{
+      const fecha=document.getElementById('mm-pub-fecha').value;
+      if(!fecha){toast('Elegí una fecha de publicación');return;}
+      const hora=document.getElementById('mm-pub-hora').value;
+      const col=document.getElementById('mm-pub-col').value;
+      const campId=document.getElementById('mm-pub-camp').value;
+      const notas=document.getElementById('mm-pub-notas').value;
+      const campNombre=campanas.find(c=>String(c.id)===campId)?.nombre||'';
+
+      // Guardar en calendario
+      const eventos=S.get('eventos',[]);
+      eventos.push({
+        id:Date.now(),
+        nombre:id.titulo,
+        fecha,
+        tipo:id.formato,
+        notas:(hora?hora+' hs':'')+( notas?' · '+notas:'')+(campNombre?' · '+campNombre:''),
+        presupuesto:totalPres,
+      });
+      S.set('eventos',eventos);
+
+      // Guardar en pipeline
+      const pipe=S.get('pipe_items',{pendiente:[],proceso:[],revision:[],listo:[]});
+      pipe[col].push({
+        id:Date.now()+1,
+        titulo:id.titulo,
+        formato:id.formato,
+        col,
+        fecha,
+        hora,
+        presupuesto:totalPres,
+        campana:campNombre,
+        notas,
+      });
+      S.set('pipe_items',pipe);
+
+      renderCal();renderEventos();renderPipeline();
+      cerrarModal();
+
+      // Ir al calendario en la fecha guardada
+      const d=new Date(fecha+'T12:00');
+      calMes=d.getMonth();calAño=d.getFullYear();
+      renderCal();
+      setTimeout(()=>clickDia(d.getDate()),100);
+
+      toast('✓ Publicación agendada para el '+new Date(fecha+'T12:00').toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'})+' a las '+hora);
+    }
+  );
 }
 
 // Compatibilidad con funciones viejas
@@ -919,7 +1013,12 @@ function renderPipeline(){
     el.innerHTML=items[col].map(it=>`
       <div class="pipe-item" draggable="true" ondragstart="dragStart(event,'${it.id}','${col}')" id="pipe-${it.id}">
         <div class="pipe-item-title">${it.titulo}</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
+        <div style="margin-top:5px;display:flex;flex-direction:column;gap:2px">
+          ${it.fecha?'<div style="font-size:10px;color:var(--acc);font-family:\'DM Mono\',monospace">📅 '+new Date(it.fecha+'T12:00').toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'})+(it.hora?' · '+it.hora+' hs':'')+'</div>':''}
+          ${it.presupuesto?'<div style="font-size:10px;color:var(--amber);font-family:\'DM Mono\',monospace">💰 $'+Number(it.presupuesto).toLocaleString('es-AR')+'</div>':''}
+          ${it.campana?'<div style="font-size:10px;color:var(--purple);font-family:\'DM Mono\',monospace">🚀 '+it.campana+'</div>':''}
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px">
           <span class="pipe-item-meta">${it.formato||'—'}</span>
           <button onclick="deletePipeItem('${it.id}','${col}')" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:11px;padding:0">✕</button>
         </div>
