@@ -2001,7 +2001,8 @@ function cerrarImpModal(){
   document.getElementById('imp-foto-preview').src='';
   document.getElementById('imp-foto-input').value='';
   document.getElementById('imp-foto-resultado').innerHTML='';
-  document.getElementById('imp-foto-btn').style.display='none';
+  const inst = document.getElementById('imp-foto-instrucciones');
+  if(inst) inst.style.display='none';
   window._impFotoBase64 = null;
   window._impFotoMime = null;
   const cb = document.getElementById('imp-confirmar-btn');
@@ -2286,7 +2287,7 @@ function cargarFotoArchivo(file){
     const preview = document.getElementById('imp-foto-preview');
     preview.src = result;
     preview.style.display = 'block';
-    document.getElementById('imp-foto-btn').style.display = 'flex';
+    document.getElementById('imp-foto-instrucciones').style.display = 'block';
     document.getElementById('imp-foto-resultado').innerHTML = '';
   };
   reader.readAsDataURL(file);
@@ -2852,20 +2853,41 @@ initFinanzas();
     <!-- TAB FOTO -->
     <div id="imp-tab-foto" style="display:none">
       <div style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.6">
-        Subí una <strong>foto del Excel</strong> o captura de pantalla con los costos del proyecto. La IA extrae los datos automáticamente.
+        Subí la foto del Excel del PM para guardarla y analizarla con Claude.
       </div>
-      <div id="imp-foto-dropzone" style="border:2px dashed var(--border2);border-radius:var(--r);padding:28px;text-align:center;cursor:pointer;transition:border-color 0.2s;margin-bottom:12px"
+
+      <!-- Paso 1: subir foto -->
+      <div style="border:2px dashed var(--border2);border-radius:var(--r);padding:24px;text-align:center;cursor:pointer;margin-bottom:12px;transition:border-color 0.2s"
         onclick="document.getElementById('imp-foto-input').click()"
         ondragover="event.preventDefault();this.style.borderColor='var(--acc)'"
         ondragleave="this.style.borderColor='var(--border2)'"
         ondrop="event.preventDefault();this.style.borderColor='var(--border2)';handleFotoDrop(event)">
         <div style="font-size:28px;margin-bottom:8px">📷</div>
-        <div style="font-size:13px;font-weight:600;color:var(--text)">Click para subir o arrastrá la imagen acá</div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px">JPG, PNG · máx 10MB</div>
+        <div style="font-size:13px;font-weight:600;color:var(--text)">Click para subir la foto del PM</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px">JPG, PNG · se guarda adjunta al proyecto</div>
         <input type="file" id="imp-foto-input" accept="image/*" style="display:none" onchange="handleFotoSelect(event)"/>
       </div>
-      <img id="imp-foto-preview" style="display:none;max-width:100%;max-height:200px;border-radius:var(--r-sm);border:1px solid var(--border);margin-bottom:10px"/>
-      <button id="imp-foto-btn" class="btn btn-acc" style="display:none;width:100%;justify-content:center;margin-bottom:14px" onclick="procesarFotoConIA()">🤖 Analizar con IA</button>
+      <img id="imp-foto-preview" style="display:none;max-width:100%;max-height:180px;border-radius:var(--r-sm);border:1px solid var(--border);margin-bottom:12px"/>
+
+      <!-- Paso 2: mensaje para Claude -->
+      <div id="imp-foto-instrucciones" style="display:none">
+        <div style="padding:12px 14px;background:var(--acc-bg);border:1px solid rgba(0,229,160,0.2);border-radius:var(--r-sm);margin-bottom:12px">
+          <div style="font-size:11px;font-weight:600;color:var(--acc);margin-bottom:8px">✓ Foto cargada — ahora mandásela a Claude para analizarla</div>
+          <div style="font-size:11px;color:var(--text2);margin-bottom:8px">Abrí <strong>claude.ai</strong>, subí la misma foto y copiá este mensaje:</div>
+          <div style="background:var(--s2);border-radius:var(--r-sm);padding:10px;font-family:'DM Mono',monospace;font-size:10px;color:var(--text2);position:relative;line-height:1.5">
+            Analizá esta imagen de costos de campaña. Extraé cada ítem con sus dos valores separados. Respondé SOLO con un array JSON sin texto extra ni backticks: [{"item":"nombre","proveedor":"proveedor","inicio":1234.56,"real":1100.00,"moneda":"USD"},...] Donde "inicio"=columna TOTAL y "real"=columna Reales (null si vacía). No incluyas filas de totales ni resúmenes.
+            <button onclick="navigator.clipboard.writeText('Analizá esta imagen de costos de campaña. Extraé cada ítem con sus dos valores separados. Respondé SOLO con un array JSON sin texto extra ni backticks: [{\"item\":\"nombre\",\"proveedor\":\"proveedor\",\"inicio\":1234.56,\"real\":1100.00,\"moneda\":\"USD\"},...] Donde \"inicio\"=columna TOTAL y \"real\"=columna Reales (null si vacía). No incluyas filas de totales ni resúmenes.');toast('Mensaje copiado ✓')" style="position:absolute;top:6px;right:6px;background:var(--s3);border:1px solid var(--border2);border-radius:4px;color:var(--acc);cursor:pointer;font-size:10px;padding:3px 8px;font-family:'DM Sans',sans-serif">📋 Copiar</button>
+          </div>
+        </div>
+
+        <!-- Paso 3: pegar JSON -->
+        <div class="fg">
+          <label class="fl">Pegá acá el JSON que te devuelve Claude</label>
+          <textarea id="imp-foto-json" style="min-height:100px;font-family:'DM Mono',monospace;font-size:11px" placeholder='[{"item":"Productora","proveedor":"Arena","inicio":69795.32,"real":69795.32,"moneda":"USD"},&#10;{"item":"Pasajes CDMX","proveedor":"Vicama","inicio":3800.00,"real":3745.00,"moneda":"USD"},...]'></textarea>
+        </div>
+        <button class="btn btn-acc" style="width:100%;justify-content:center" onclick="procesarJSONFoto()">Cargar ítems ↗</button>
+      </div>
+
       <div id="imp-foto-resultado"></div>
     </div>
 
