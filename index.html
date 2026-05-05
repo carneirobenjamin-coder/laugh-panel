@@ -2021,7 +2021,7 @@ async function procesarFotoConIA(){
   res.innerHTML = '<div style="font-size:12px;color:var(--text3);padding:10px 0">Leyendo columnas TOTAL y REALES...</div>';
 
   try {
-    const response = await fetch('https://laugh-proxy.carneirobenjamin.workers.dev',{
+    const response = await fetch('https://laugh-api.carneirobenjamin.workers.dev',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
@@ -2114,7 +2114,7 @@ async function procesarTextoConIA(){
   res.innerHTML='<div style="font-size:12px;color:var(--text3);padding:8px 0">Extrayendo ítems...</div>';
 
   try {
-    const response = await fetch('https://laugh-proxy.carneirobenjamin.workers.dev',{
+    const response = await fetch('https://laugh-api.carneirobenjamin.workers.dev',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
@@ -2300,7 +2300,7 @@ async function procesarExcelPegado(){
   btn.disabled=true; btn.textContent='⏳ Procesando...';
   res.innerHTML='<div style="font-size:12px;color:var(--text3);padding:8px 0">Extrayendo ítems...</div>';
   try {
-    const response = await fetch('https://laugh-proxy.carneirobenjamin.workers.dev',{
+    const response = await fetch('https://laugh-api.carneirobenjamin.workers.dev',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
