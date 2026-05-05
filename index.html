@@ -2820,6 +2820,26 @@ function reporteProyecto(pid){
   setTimeout(function(){ var ok=document.getElementById('modal-ok'); if(ok) ok.textContent='Cerrar'; },50);
 }
 
+function copiarMensajeClaud(){
+  var msg = 'Analizá esta imagen de costos de campaña. Extraé cada ítem con sus dos valores separados. Respondé SOLO con un array JSON sin texto extra ni backticks: [{"item":"nombre","proveedor":"proveedor","inicio":1234.56,"real":1100.00,"moneda":"USD"},...] Donde "inicio"=columna TOTAL y "real"=columna Reales (null si vacía). No incluyas filas de totales ni resúmenes.';
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(msg).then(function(){ toast('Mensaje copiado ✓'); }).catch(function(){ copiarFallback(msg); });
+  } else {
+    copiarFallback(msg);
+  }
+}
+function copiarFallback(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.left = '-9999px';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand('copy'); toast('Mensaje copiado ✓'); }
+  catch(e){ toast('Seleccioná el texto manualmente'); }
+  document.body.removeChild(ta);
+}
+
 function initFinanzas(){
   const proyectos = getProyectos();
   let changed = false;
@@ -2876,7 +2896,7 @@ initFinanzas();
           <div style="font-size:11px;color:var(--text2);margin-bottom:8px">Abrí <strong>claude.ai</strong>, subí la misma foto y copiá este mensaje:</div>
           <div style="background:var(--s2);border-radius:var(--r-sm);padding:10px;font-family:'DM Mono',monospace;font-size:10px;color:var(--text2);position:relative;line-height:1.5">
             Analizá esta imagen de costos de campaña. Extraé cada ítem con sus dos valores separados. Respondé SOLO con un array JSON sin texto extra ni backticks: [{"item":"nombre","proveedor":"proveedor","inicio":1234.56,"real":1100.00,"moneda":"USD"},...] Donde "inicio"=columna TOTAL y "real"=columna Reales (null si vacía). No incluyas filas de totales ni resúmenes.
-            <button onclick="navigator.clipboard.writeText('Analizá esta imagen de costos de campaña. Extraé cada ítem con sus dos valores separados. Respondé SOLO con un array JSON sin texto extra ni backticks: [{\"item\":\"nombre\",\"proveedor\":\"proveedor\",\"inicio\":1234.56,\"real\":1100.00,\"moneda\":\"USD\"},...] Donde \"inicio\"=columna TOTAL y \"real\"=columna Reales (null si vacía). No incluyas filas de totales ni resúmenes.');toast('Mensaje copiado ✓')" style="position:absolute;top:6px;right:6px;background:var(--s3);border:1px solid var(--border2);border-radius:4px;color:var(--acc);cursor:pointer;font-size:10px;padding:3px 8px;font-family:'DM Sans',sans-serif">📋 Copiar</button>
+            <button onclick="copiarMensajeClaud()" style="position:absolute;top:6px;right:6px;background:var(--s3);border:1px solid var(--border2);border-radius:4px;color:var(--acc);cursor:pointer;font-size:10px;padding:3px 8px;font-family:'DM Sans',sans-serif">📋 Copiar</button>
           </div>
         </div>
 
