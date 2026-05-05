@@ -1862,6 +1862,7 @@ function renderMargenProyecto(){
   const totalCotizado = costos.reduce((s,c)=>s+(parseFloat(c.cotizado)||0), 0);
   const {valor: totalEfectivo, esReal: hayReal} = totalColumna(costos);
   const totalReal = hayReal ? totalEfectivo : 0;
+  const venta = parseFloat(p.venta)||0;
 
   const netoInicio   = venta - totalCotizado;
   const margenInicio = venta ? ((netoInicio/venta)*100).toFixed(2) : null;
@@ -2497,6 +2498,7 @@ function renderBBDD(){
     var inicio   = parseFloat(c.cotizado)||0;
     var real     = (c.real!==''&&c.real!=null) ? parseFloat(c.real)||0 : null;
     var efectivo = real!=null ? real : inicio;
+    if(!c.item && inicio===0 && real===null) return '';
     totalInicio += inicio;
     if(real!=null){ totalReal+=real; hasReal=true; }
     if(c.estado==='Pagado') totalPag+=efectivo; else totalPend+=efectivo;
@@ -2529,7 +2531,7 @@ function renderBBDD(){
         +(c.estado!=='Pagado' ? '<span style="font-size:11px;cursor:pointer;margin-left:3px;opacity:0.6" onclick="programarFechaPago('+pid+','+ci+')" title="Programar recordatorio">📅</span>' : '')
       +'</td>'
       +'</tr>';
-  }).join('');
+  }).filter(Boolean).join('');
 
   document.getElementById('bbdd-count').textContent = rows.length;
   document.getElementById('bbdd-total-inicio').textContent = fmt(totalInicio);
