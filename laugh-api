@@ -1,0 +1,92 @@
+export default {
+  async fetch(request, env) {
+
+    const corsHeaders = {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+    };
+
+    if (request.method === 'OPTIONS') {
+      return new Response(null, { headers: corsHeaders });
+    }
+
+    if (request.method !== 'POST') {
+      return new Response('Method not allowed', { status: 405 });
+    }
+
+    try {
+      const body = await request.json();
+
+      // Detect if request has images
+      const hasImages = (body.messages || []).some(msg =>
+        Array.isArray(msg.content) && msg.content.some(p => p.type === 'image')
+      );
+
+      // Use vision model for images, haiku for text
+      const model = hasImages ? 'anthropic/claude-3.5-sonnet' : 'anthropic/claude-3.5-haiku';
+
+      // Convert Anthropic format → OpenAI/OpenRouter format
+      const messages = (body.messages || []).map(msg => {
+        if (typeof msg.content === 'string') {
+          return { role: msg.role, content: msg.content };
+        }
+        if (Array.isArray(msg.content)) {
+          const parts = msg.content.map(part => {
+            if (part.type === 'text') {
+              return { type: 'text', text: part.text };
+            }
+            if (part.type === 'image' && part.source?.type === 'base64') {
+              return {
+                type: 'image_url',
+                image_url: { url: `data:${part.source.media_type};base64,${part.source.data}` }
+              };
+            }
+            return null;
+          }).filter(Boolean);
+          return { role: msg.role, content: parts };
+        }
+        return msg;
+      });
+
+      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer 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',
+          'HTTP-Referer': 'https://laugh.agency',
+          'X-Title': 'LAUGH Finance System',
+        },
+        body: JSON.stringify({
+          model,
+          max_tokens: 2000,
+          messages,
+        }),
+      });
+
+      const data = await response.json();
+
+      // If OpenRouter returned an error, pass it through clearly
+      if (data.error) {
+        return new Response(JSON.stringify({
+          content: [{ type: 'text', text: 'OpenRouter error: ' + JSON.stringify(data.error) }]
+        }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+
+      const text = data.choices?.[0]?.message?.content || '';
+      const converted = { content: [{ type: 'text', text: text }] };
+
+      return new Response(JSON.stringify(converted), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+
+    } catch (err) {
+      return new Response(JSON.stringify({
+        content: [{ type: 'text', text: 'Worker error: ' + err.message }]
+      }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+  }
+};
