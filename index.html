@@ -3186,16 +3186,22 @@ function initFinanzas(){
   renderBBDD();
   actualizarKPIsFinanzas();
   chequearPagosProximos();
-  // Luego sincronizar con Supabase en background
+  // Sincronizar con Supabase en background sin perder estado activo
   getProyectosAsync().then(function(proyectosDB){
-    if(proyectosDB && proyectosDB.length > 0){
+    if(proyectosDB && proyectosDB.length >= _proyectosCache.length && proyectosDB.length > 0){
+      var proyActivo = finProyectoActivo;
       _proyectosCache = proyectosDB;
       S.set('fin_proyectos', proyectosDB);
+      finProyectoActivo = proyActivo;
       renderProyectosLista();
       renderBBDD();
       actualizarKPIsFinanzas();
+      if(finProyectoActivo !== null){
+        renderCostosProyecto();
+        renderMargenProyecto();
+      }
     }
-  }).catch(function(e){ console.log('Supabase no disponible, usando local:', e.message); });
+  }).catch(function(e){ console.log('Supabase no disponible:', e.message); });
 }
 
 initFinanzas();
