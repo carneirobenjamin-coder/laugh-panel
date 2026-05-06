@@ -1876,6 +1876,7 @@ function renderCostosProyecto(){
   if(finProyectoActivo===null) return;
   const proyectos = getProyectos();
   const p = proyectos[finProyectoActivo];
+  if(!p) return;
   document.getElementById('fin-costos-titulo').textContent = 'Costos · '+p.nombre;
   const filtro = document.getElementById('fin-filtro-estado').value;
   let costos = p.costos||[];
@@ -2010,6 +2011,7 @@ function costoEfectivo(c){
 function renderMargenProyecto(){
   if(finProyectoActivo===null) return;
   const p = getProyectos()[finProyectoActivo];
+  if(!p) return;
   document.getElementById('fin-margen-titulo').textContent = 'Margen · '+p.nombre;
   const costos = p.costos||[];
 
