@@ -2745,15 +2745,22 @@ function dividirEnCuotas(pid, ci){
     });
     // Guardar posición de la primera cuota
     insertIdx = indicesToRemove[0];
-    // Calcular monto total de las cuotas
-    var montoTotal = cuotasExistentes.reduce(function(s,q){ return s+(parseFloat(q.cotizado)||0); }, 0);
-    // Reunificar temporalmente en el item original para mostrar en el form
+    // Calcular monto total de las cuotas — cotizado Y real
+    var montoTotal     = cuotasExistentes.reduce(function(s,q){ return s+(parseFloat(q.cotizado)||0); }, 0);
+    var realTotal      = cuotasExistentes.reduce(function(s,q){ return s+(parseFloat(q.real)||0); }, 0);
+    var hayReal        = cuotasExistentes.some(function(q){ return q.real && q.real !== ''; });
+    // Si las cuotas tienen el real original guardado, usarlo directamente
+    var realOriginal   = cuotasExistentes[0]._realOriginal;
+    var cotizOriginal  = cuotasExistentes[0]._cotizadoOriginal;
+    var realFinal      = realOriginal !== undefined ? realOriginal : (hayReal ? String(realTotal) : '');
+    var cotizFinal     = cotizOriginal !== undefined ? cotizOriginal : String(montoTotal);
+    // Reunificar
     c = {
       item: itemOriginal,
       proveedor: cuotasExistentes[0].proveedor||'',
       categoria: cuotasExistentes[0].categoria||'',
-      cotizado: String(montoTotal),
-      real: '',
+      cotizado: cotizFinal,
+      real: realFinal,
       moneda: cuotasExistentes[0].moneda||'USD',
       _itemOriginal: itemOriginal
     };
@@ -2761,8 +2768,9 @@ function dividirEnCuotas(pid, ci){
     for(var r=indicesToRemove.length-1; r>=0; r--){
       costos.splice(indicesToRemove[r], 1);
     }
-    // Insertar ítem reunificado temporalmente
-    costos.splice(insertIdx, 0, Object.assign({}, c, {_id: Date.now(), estado:'Pendiente', fechaPago:''}));
+    // Insertar ítem reunificado (preservando real original y estado correcto)
+    var estadoReunif = realFinal ? 'Pagado' : 'Pendiente';
+    costos.splice(insertIdx, 0, Object.assign({}, c, {_id: Date.now(), estado: estadoReunif, fechaPago:'', _esCuota:false}));
     setProyectos(proyectos);
     proyectos = getProyectos();
     c = proyectos[pid].costos[insertIdx];
@@ -2809,6 +2817,8 @@ function confirmarCuotas(){
       return;
     }
     var cuotas = [];
+    var realOriginal = c.real || '';
+    var cotizadoOriginal = c.cotizado || '';
     for(var k=1; k<=n; k++){
       var montoEl = document.getElementById('dc-monto-'+k);
       var fechaEl = document.getElementById('dc-fecha-'+k);
@@ -2825,7 +2835,9 @@ function confirmarCuotas(){
         _esCuota: true,
         _numCuota: k,
         _totalCuotas: n,
-        _itemOriginal: c.item
+        _itemOriginal: c.item,
+        _realOriginal: realOriginal,
+        _cotizadoOriginal: cotizadoOriginal
       });
     }
     var costos = proyectos[pid].costos;
