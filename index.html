@@ -2531,8 +2531,8 @@ function renderBBDD(){
       // Cuotas
       +'<td style="text-align:center">'
         +(c._esCuota
-          ? '<span style="font-size:11px;cursor:pointer;color:var(--text3)" onclick="dividirEnCuotas('+pid+','+ci+')" title="Editar cuotas">✏️</span>'
-          : '<span style="font-size:13px;cursor:pointer;color:var(--blue)" onclick="dividirEnCuotas('+pid+','+ci+')" title="Dividir en cuotas">÷</span>')
+          ? '<button onclick="dividirEnCuotas('+pid+','+ci+')" style="background:none;border:1px solid var(--border2);border-radius:4px;color:var(--text3);cursor:pointer;font-size:10px;padding:2px 6px;font-family:\'DM Sans\',sans-serif">✏️ cuotas</button>'
+          : '<button onclick="dividirEnCuotas('+pid+','+ci+')" style="background:none;border:1px solid rgba(59,158,255,0.4);border-radius:4px;color:var(--blue);cursor:pointer;font-size:10px;padding:2px 6px;font-family:\'DM Sans\',sans-serif">+ cuotas</button>')
       +'</td>'
       +'</tr>';
   }).filter(Boolean).join('');
