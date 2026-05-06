@@ -1563,8 +1563,164 @@ const FIN_MONEDAS = ['USD','ARS','MEX','BRL'];
 let finProyectoActivo = null;
 
 // ─── PROYECTOS ───────────────────────────────────────────
-function getProyectos(){ return S.get('fin_proyectos',[]); }
-function setProyectos(p){ S.set('fin_proyectos',p); }
+// ─── SUPABASE CONFIG ───────────────────────────────────────────
+const SUPA_URL = 'https://tnlxrxwqogmlgnwlitia.supabase.co';
+const SUPA_KEY = 'sb_publishable_1hMwgCH9DLkBtI72Ly0hJA_bJAklgzR';
+
+async function supaFetch(path, options){
+  const res = await fetch(SUPA_URL+'/rest/v1/'+path, Object.assign({
+    headers: {
+      'apikey': SUPA_KEY,
+      'Authorization': 'Bearer '+SUPA_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=representation'
+    }
+  }, options));
+  if(!res.ok){
+    const err = await res.text();
+    throw new Error('Supabase error: '+err);
+  }
+  const txt = await res.text();
+  return txt ? JSON.parse(txt) : [];
+}
+
+// Cache local para que la UI sea rápida
+let _proyectosCache = null;
+
+async function getProyectosAsync(){
+  try {
+    // Traer proyectos
+    const proyectos = await supaFetch('proyectos?order=creado_en.asc');
+    // Traer todos los costos
+    const costos = await supaFetch('costos?order=orden.asc');
+    // Agrupar costos por proyecto
+    proyectos.forEach(function(p){
+      p.costos = costos.filter(function(c){ return c.proyecto_id === p.id; }).map(function(c){
+        return {
+          _id: c.id,
+          item: c.item||'',
+          proveedor: c.proveedor||'',
+          categoria: c.categoria||'',
+          cotizado: c.cotizado||'',
+          real: c.real||'',
+          moneda: c.moneda||'USD',
+          estado: c.estado||'Pendiente',
+          fechaPago: c.fecha_pago||'',
+          comprobante: c.comprobante||null,
+          notas: c.notas||'',
+          _esCuota: c.es_cuota||false,
+          _numCuota: c.num_cuota,
+          _totalCuotas: c.total_cuotas,
+          _itemOriginal: c.item_original||'',
+          _realOriginal: c.real_original||'',
+          _cotizadoOriginal: c.cotizado_original||''
+        };
+      });
+      p.fotoOriginal = p.foto_original||null;
+      p.creadoEn = p.creado_en;
+    });
+    _proyectosCache = proyectos;
+    return proyectos;
+  } catch(e){
+    console.error('Error cargando proyectos:', e);
+    // Fallback a localStorage si Supabase falla
+    return S.get('fin_proyectos',[]);
+  }
+}
+
+async function setProyectosAsync(proyectos){
+  try {
+    _proyectosCache = proyectos;
+    // También guardar en localStorage como backup
+    S.set('fin_proyectos', proyectos);
+    // Sincronizar cada proyecto con Supabase
+    for(var i=0; i<proyectos.length; i++){
+      var p = proyectos[i];
+      // Upsert proyecto
+      await supaFetch('proyectos?id=eq.'+p.id, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          nombre: p.nombre,
+          cliente: p.cliente||'',
+          pm: p.pm||'',
+          trimestre: p.trimestre||'',
+          evento: p.evento||'',
+          fecha: p.fecha||'',
+          venta: p.venta||0,
+          foto_original: null, // no guardar fotos en DB
+          creado_en: p.creadoEn||p.id,
+          actualizado_en: Date.now()
+        })
+      }).catch(async function(){
+        // Si no existe, insertar
+        await supaFetch('proyectos', {
+          method: 'POST',
+          body: JSON.stringify({
+            id: p.id,
+            nombre: p.nombre,
+            cliente: p.cliente||'',
+            pm: p.pm||'',
+            trimestre: p.trimestre||'',
+            evento: p.evento||'',
+            fecha: p.fecha||'',
+            venta: p.venta||0,
+            foto_original: null,
+            creado_en: p.creadoEn||p.id,
+            actualizado_en: Date.now()
+          })
+        });
+      });
+      // Sincronizar costos: borrar los existentes y reinsertarlos
+      await supaFetch('costos?proyecto_id=eq.'+p.id, {method:'DELETE'});
+      var costos = p.costos||[];
+      if(costos.length > 0){
+        var costosDB = costos.map(function(c, idx){
+          return {
+            id: c._id,
+            proyecto_id: p.id,
+            item: c.item||'',
+            proveedor: c.proveedor||'',
+            categoria: c.categoria||'',
+            cotizado: c.cotizado||'',
+            real: c.real||'',
+            moneda: c.moneda||'USD',
+            estado: c.estado||'Pendiente',
+            fecha_pago: c.fechaPago||'',
+            comprobante: null, // no guardar comprobantes en DB
+            notas: c.notas||'',
+            es_cuota: c._esCuota||false,
+            num_cuota: c._numCuota||null,
+            total_cuotas: c._totalCuotas||null,
+            item_original: c._itemOriginal||'',
+            real_original: c._realOriginal||'',
+            cotizado_original: c._cotizadoOriginal||'',
+            orden: idx
+          };
+        });
+        await supaFetch('costos', {
+          method: 'POST',
+          body: JSON.stringify(costosDB),
+          headers: {
+            'apikey': SUPA_KEY,
+            'Authorization': 'Bearer '+SUPA_KEY,
+            'Content-Type': 'application/json',
+            'Prefer': 'resolution=merge-duplicates'
+          }
+        });
+      }
+    }
+  } catch(e){
+    console.error('Error guardando en Supabase:', e);
+  }
+}
+
+// Funciones síncronas que usan el cache
+function getProyectos(){ return _proyectosCache || S.get('fin_proyectos',[]); }
+function setProyectos(p){
+  _proyectosCache = p;
+  S.set('fin_proyectos', p); // guardar local inmediatamente
+  setProyectosAsync(p);      // sincronizar con Supabase en background
+}
 
 function renderProyectosLista(){
   const proyectos = getProyectos();
@@ -3016,16 +3172,28 @@ function cargarHistorialExterno(){
 }
 
 function initFinanzas(){
-  const proyectos = getProyectos();
-  let changed = false;
+  // Cargar desde localStorage primero (instantáneo)
+  _proyectosCache = S.get('fin_proyectos',[]);
+  var proyectos = _proyectosCache;
+  var changed = false;
   proyectos.forEach(p=>{
     (p.costos||[]).forEach(c=>{ if(!c._id){c._id=Date.now()+Math.random();changed=true;} });
   });
-  if(changed) setProyectos(proyectos);
+  if(changed) S.set('fin_proyectos', proyectos);
   renderProyectosLista();
   renderBBDD();
   actualizarKPIsFinanzas();
   chequearPagosProximos();
+  // Luego sincronizar con Supabase en background
+  getProyectosAsync().then(function(proyectosDB){
+    if(proyectosDB && proyectosDB.length > 0){
+      _proyectosCache = proyectosDB;
+      S.set('fin_proyectos', proyectosDB);
+      renderProyectosLista();
+      renderBBDD();
+      actualizarKPIsFinanzas();
+    }
+  }).catch(function(e){ console.log('Supabase no disponible, usando local:', e.message); });
 }
 
 initFinanzas();
