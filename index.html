@@ -1764,12 +1764,18 @@ function renderProyectosLista(){
 }
 
 function seleccionarProyectoFin(i){
-  finProyectoActivo = i;
-  renderProyectosLista();
-  renderCostosProyecto();
-  renderMargenProyecto();
-  document.getElementById('fin-costos-panel').style.display='block';
-  document.getElementById('fin-margen-panel').style.display='block';
+  try {
+    finProyectoActivo = i;
+    const p = getProyectos()[i];
+    if(!p){ toast('Error: proyecto no encontrado'); return; }
+    renderProyectosLista();
+    renderCostosProyecto();
+    renderMargenProyecto();
+    document.getElementById('fin-costos-panel').style.display='block';
+    document.getElementById('fin-margen-panel').style.display='block';
+  } catch(e) {
+    alert('Error abriendo proyecto: '+e.message);
+  }
 }
 
 function nuevoProyectoFin(){
@@ -3174,7 +3180,7 @@ function cargarHistorialExterno(){
 }
 
 function initFinanzas(){
-  // Cargar desde localStorage primero (instantáneo)
+  // Cargar desde localStorage
   _proyectosCache = S.get('fin_proyectos',[]);
   var proyectos = _proyectosCache;
   var changed = false;
@@ -3186,22 +3192,7 @@ function initFinanzas(){
   renderBBDD();
   actualizarKPIsFinanzas();
   chequearPagosProximos();
-  // Sincronizar con Supabase en background sin perder estado activo
-  getProyectosAsync().then(function(proyectosDB){
-    if(proyectosDB && proyectosDB.length >= _proyectosCache.length && proyectosDB.length > 0){
-      var proyActivo = finProyectoActivo;
-      _proyectosCache = proyectosDB;
-      S.set('fin_proyectos', proyectosDB);
-      finProyectoActivo = proyActivo;
-      renderProyectosLista();
-      renderBBDD();
-      actualizarKPIsFinanzas();
-      if(finProyectoActivo !== null){
-        renderCostosProyecto();
-        renderMargenProyecto();
-      }
-    }
-  }).catch(function(e){ console.log('Supabase no disponible:', e.message); });
+  // Supabase sync deshabilitado temporalmente — usar solo localStorage
 }
 
 initFinanzas();
